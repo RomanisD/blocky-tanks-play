@@ -607,7 +607,7 @@
       body.touch .kill-feed { top: calc(max(10px, env(safe-area-inset-top)) + 104px); right: auto; left: 50%; transform: translateX(-50%); align-items: center; }
     }
   </style>
-  <script type="module" crossorigin src="./assets/index-1AfEJ9BG.js"></script>
+  <script type="module" crossorigin src="./assets/index-4Vzdzost.js"></script>
 </head>
   <body>
   <canvas id="game"></canvas>
@@ -684,26 +684,29 @@
       <input type="text" id="player-name-input" class="name-input" placeholder="Ваше имя" maxlength="24" />
       <div class="mode-buttons">
         <button class="mode-btn" id="btn-single">
+          <span class="mode-art" style="background-image:url(menu/mode-single.webp)"><b class="mode-vs">VS</b><span class="mode-bot">🤖</span></span>
           <span class="mode-icon">🤖</span>
           <span class="mode-title">Одиночная игра</span>
           <span class="mode-desc">Бой с ботами. Без интернета и сервера.</span>
         </button>
         <button class="mode-btn" id="btn-campaign">
+          <span class="mode-art" style="background-image:url(menu/mode-campaign.webp)"></span>
           <span class="mode-icon">📖</span>
           <span class="mode-title">Кампания</span>
           <span class="mode-desc">Экипаж в войне 1941–45. Глава 1: «Отступление».</span>
         </button>
         <button class="mode-btn" id="btn-multi">
+          <span class="mode-art" style="background-image:url(menu/mode-multi.webp)"><span class="mode-live"><i></i>онлайн</span></span>
           <span class="mode-icon">🌐</span>
           <span class="mode-title">Мультиплеер</span>
           <span class="mode-desc">Бой с живыми игроками. <span id="multi-server-note"></span></span>
         </button>
       </div>
       <button class="menu-btn profile-btn" id="btn-profile">👤 Профиль</button>
-      <div class="menu-row"><button class="menu-btn tutorial-btn" id="btn-tutorial">🎓 Обучение</button>
-      <button class="menu-btn secondary" id="btn-settings">⚙ Настройки</button>
-      <button class="menu-btn secondary" id="btn-feedback">💬 Отзыв</button>
-      <a class="menu-btn secondary" id="btn-telegram" href="https://t.me/blockytanks" target="_blank" rel="noopener" title="Новости, бета-тесты и обсуждение">📢 Telegram</a></div>
+      <div class="menu-row round-row"><button class="menu-btn tutorial-btn" id="btn-tutorial"><i>🎓</i><span>Обучение</span></button>
+      <button class="menu-btn secondary" id="btn-settings"><i>⚙</i><span>Настройки</span></button>
+      <button class="menu-btn secondary" id="btn-feedback"><i>💬</i><span>Отзыв</span></button>
+      <a class="menu-btn secondary" id="btn-telegram" href="https://t.me/blockytanks" target="_blank" rel="noopener" title="Новости, бета-тесты и обсуждение"><i>📢</i><span>Telegram</span></a></div>
       <button class="menu-credits" id="btn-credits">📜 Авторы · звуки Freesound (CC0, CC-BY)</button>
       <!-- Бейдж PixelPicked: проверка игры на площадке (+25 к видимости, 2026-10-14) -->
       <a class="pp-badge" href="https://pixelpicked.com/game/40fNZ5ObAEM/blocky-tanks" target="_blank" rel="noopener"><img src="https://api.pixelpicked.com/api/badges/40fNZ5ObAEM/live.png?theme=dark" width="250" height="54" alt="Approved on PixelPicked" /></a>
@@ -908,6 +911,65 @@
       background: #ffd54f; color: #3e2723; font: 800 16px system-ui, sans-serif;
     }
     .menu-btn.secondary { background: rgba(255,255,255,.15); color: #fff; }
+  </style>
+  <style>
+    /* ═══ Стиль меню «неон-стекло» (владелец 2026-10-19, по макету): сетка на фоне, стеклянные карточки
+       со светящейся зелёной рамкой, картинки режимов, профиль полосой, круглые кнопки внизу ═══ */
+    .tank-menu {
+      background-color: #0b140e;
+      background-image:
+        linear-gradient(rgba(95,224,138,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(95,224,138,.05) 1px, transparent 1px),
+        radial-gradient(ellipse at 50% -10%, #24432d 0%, #0b140e 65%);
+      background-size: 36px 36px, 36px 36px, 100% 100%;
+    }
+    .menu-title { color: #ffd54f; text-shadow: 0 3px 10px rgba(0,0,0,.6), 0 0 26px rgba(255,213,79,.35); }
+    .name-input { background: rgba(20,40,28,.7); border: 1px solid rgba(110,230,140,.35); border-radius: 12px; box-shadow: inset 0 0 12px rgba(0,0,0,.35); }
+    .name-input:focus { outline: none; border-color: #5fe08a; box-shadow: 0 0 14px rgba(95,224,138,.35); }
+    .mode-btn, .theme-card {
+      background: rgba(20,40,28,.72); border: 1px solid rgba(110,230,140,.32); border-radius: 18px; backdrop-filter: blur(6px);
+      box-shadow: 0 0 0 1px rgba(0,0,0,.3), 0 0 22px rgba(95,224,138,.08);
+    }
+    .mode-btn:hover, .theme-card:hover { border-color: #5fe08a; background: rgba(28,56,38,.85); box-shadow: 0 0 26px rgba(95,224,138,.3); }
+    .mode-btn { position: relative; overflow: hidden; padding: 0 0 1rem; gap: .3rem; }
+    .mode-art { position: relative; display: block; width: 100%; aspect-ratio: 16 / 7; background: center / cover no-repeat #1a2a1e; margin-bottom: .2rem; }
+    .mode-art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,20,14,0) 45%, rgba(20,40,28,.95) 100%); }
+    .mode-btn .mode-icon { position: relative; z-index: 1; margin-top: -2.1rem; width: 52px; height: 52px; display: grid; place-items: center; font-size: 1.7rem;
+      border-radius: 50%; background: radial-gradient(circle at 50% 35%, #2a4c33, #10201a); border: 2px solid rgba(95,224,138,.7); box-shadow: 0 0 16px rgba(95,224,138,.4); }
+    .mode-btn .mode-title { font-size: 1.2rem; }
+    .mode-btn .mode-desc { padding: 0 .9rem; }
+    .mode-vs { position: absolute; z-index: 1; right: 30%; top: 38%; font: italic 900 22px system-ui; color: #9be7ff; text-shadow: 0 0 10px #29b6f6, 0 2px 4px #000; }
+    .mode-bot { position: absolute; z-index: 1; right: 8%; top: 18%; font-size: 3rem; filter: drop-shadow(0 0 10px rgba(41,182,246,.7)); }
+    .mode-live { position: absolute; z-index: 1; top: 8px; right: 10px; display: flex; align-items: center; gap: 6px; padding: 2px 9px; border-radius: 999px;
+      background: rgba(11,20,14,.7); color: #5fe08a; font: 800 12px system-ui; border: 1px solid rgba(95,224,138,.5); }
+    .mode-live i { width: 7px; height: 7px; border-radius: 50%; background: #5fe08a; box-shadow: 0 0 8px #5fe08a; animation: live-dot 1.6s infinite; }
+    @keyframes live-dot { 50% { opacity: .35; } }
+    #btn-multi.disabled .mode-live { display: none; }
+    #btn-multi:not(.disabled) { border-color: rgba(95,224,138,.6); box-shadow: 0 0 26px rgba(95,224,138,.2); }
+    .profile-btn { width: min(640px, 100%); margin: 4px auto 6px; padding: .75rem 1rem; border-radius: 14px;
+      background: linear-gradient(90deg, rgba(95,224,138,.22), rgba(95,224,138,.1)); border: 1px solid rgba(95,224,138,.6); color: #c8f5d5;
+      box-shadow: 0 0 18px rgba(95,224,138,.18); }
+    .profile-btn:hover { background: linear-gradient(90deg, rgba(95,224,138,.32), rgba(95,224,138,.16)); }
+    .menu-btn { border-radius: 14px; }
+    .menu-btn:not(.secondary):not(.profile-btn) { background: linear-gradient(180deg, #ffd54f, #f2b821); box-shadow: 0 4px 18px rgba(255,213,79,.3); }
+    .menu-btn.secondary { background: rgba(20,40,28,.75); border: 1px solid rgba(110,230,140,.35); }
+    .menu-btn.secondary:hover { border-color: #5fe08a; box-shadow: 0 0 14px rgba(95,224,138,.25); }
+    /* Круглые кнопки внизу главного меню */
+    .round-row { gap: 18px; margin-top: 10px; }
+    .round-row .menu-btn { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 0; background: none !important; border: 0 !important;
+      box-shadow: none !important; color: #e8f5ea; font: 700 13px system-ui; }
+    .round-row .menu-btn i { width: 58px; height: 58px; display: grid; place-items: center; font-style: normal; font-size: 24px; border-radius: 50%;
+      background: radial-gradient(circle at 50% 35%, #24432d, #10201a); border: 2px solid rgba(95,224,138,.6); box-shadow: 0 0 16px rgba(95,224,138,.3);
+      transition: transform .15s, box-shadow .2s; }
+    .round-row .menu-btn:hover i { transform: translateY(-2px) scale(1.06); box-shadow: 0 0 24px rgba(95,224,138,.55); }
+    .round-row .tutorial-btn i { border-color: #ffd54f; box-shadow: 0 0 16px rgba(255,213,79,.4); }
+    .round-row .tutorial-btn.pulse { animation: none; }
+    .round-row .tutorial-btn.pulse i { animation: tut-pulse 1.6s ease-in-out infinite; }
+    @media (min-width: 640px) and (max-width: 979px) { #btn-multi { grid-column: 1 / -1; } #btn-multi .mode-art { aspect-ratio: 16 / 4.5; } }
+    @media (min-width: 980px) { .mode-buttons { grid-template-columns: repeat(3, 1fr); max-width: 980px; } .profile-btn { width: min(980px, 100%); } }
+    @media (max-width: 639px) { .mode-art { aspect-ratio: 16 / 5.5; } .mode-btn .mode-icon { width: 44px; height: 44px; font-size: 1.4rem; margin-top: -1.8rem; } }
+    @media (max-height: 500px) and (min-width: 700px) { .mode-buttons { grid-template-columns: repeat(3, 1fr); max-width: 980px; } #btn-multi { grid-column: auto; } #btn-multi .mode-art { aspect-ratio: 16 / 6; } .mode-btn .mode-desc { font-size: 12px; } .profile-btn { width: min(980px, 100%); } }
+    @media (max-height: 500px) { .mode-art { aspect-ratio: 16 / 5; } .round-row .menu-btn i { width: 48px; height: 48px; font-size: 20px; } }
   </style>
 </body>
 </html>
