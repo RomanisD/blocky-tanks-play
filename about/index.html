@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blocky Tanks — танковые бои Второй мировой в браузере, бесплатно</title>
+<meta name="description" content="Blocky Tanks — бесплатная браузерная игра про танки Второй мировой: 28 машин по чертежам, 13 карт реальных сражений, онлайн-бои до 8 игроков, кампания. Без скачивания и регистрации, на компьютере и телефоне.">
+<link rel="canonical" href="https://romanisd.github.io/blocky-tanks-play/about/">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0b140e">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Blocky Tanks">
+<meta property="og:title" content="Blocky Tanks — танки Второй мировой в браузере">
+<meta property="og:description" content="Заходи и играй за 2 секунды: 28 машин по чертежам, 13 карт сражений, онлайн до 8 игроков. Бесплатно, на ПК и телефоне.">
+<meta property="og:image" content="https://romanisd.github.io/blocky-tanks-play/about/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://romanisd.github.io/blocky-tanks-play/about/">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"VideoGame","name":"Blocky Tanks","url":"https://romanisd.github.io/blocky-tanks-play/about/",
+ "image":"https://romanisd.github.io/blocky-tanks-play/about/img/og.jpg","genre":["Action","Tank battle","WW2"],
+ "gamePlatform":["Web browser","PC","Mobile"],"applicationCategory":"Game","operatingSystem":"Any","inLanguage":["ru","en"],
+ "playMode":["SinglePlayer","MultiPlayer"],"offers":{"@type":"Offer","price":"0","priceCurrency":"RUB"},
+ "description":"Бесплатные танковые бои Второй мировой в браузере: 28 машин по чертежам, 13 карт реальных сражений, онлайн до 8 игроков."}
+</script>
+<style>
+:root {
+  --bg: #0b140e; --card: rgba(20, 40, 28, .72); --line: rgba(110, 230, 140, .26);
+  --glow: #5fe08a; --gold: #ffd54f; --gold-d: #f2b821; --ink: #eaf5ec; --muted: #a9c2ae; --radius: 20px;
+  --glass: rgba(255,255,255,.06);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; color: var(--ink); background: var(--bg);
+  font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background-image:
+    linear-gradient(rgba(95,224,138,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(95,224,138,.045) 1px, transparent 1px),
+    radial-gradient(ellipse at 50% -10%, #23402c 0%, var(--bg) 60%);
+  background-size: 40px 40px, 40px 40px, 100% 100%;
+}
+a { color: var(--gold); }
+.wrap { width: min(1160px, 100% - 32px); margin: 0 auto; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+/* Шапка */
+.top { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(12px); background: rgba(11,20,14,.7); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; align-items: center; gap: 16px; height: 58px; }
+.logo { font-weight: 900; letter-spacing: .05em; font-size: 20px; color: var(--gold); text-decoration: none; text-shadow: 0 0 14px rgba(255,213,79,.35); }
+.logo span { color: var(--glow); text-shadow: 0 0 14px rgba(95,224,138,.45); }
+.top nav { margin-left: auto; display: flex; gap: 18px; font-weight: 600; font-size: 15px; }
+.top nav a { color: var(--muted); text-decoration: none; }
+.top nav a:hover { color: var(--ink); }
+.top .mini-play { padding: 7px 16px; border-radius: 10px; background: var(--gold); color: #1b1b1b; font-weight: 900; text-decoration: none; font-size: 14px; }
+.lang { border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 10px; padding: 6px 10px; font: 700 13px system-ui; cursor: pointer; }
+@media (max-width: 820px) { .top nav { display: none; } .top .mini-play { margin-left: auto; } }
+
+/* Первый экран: видео боя по кругу */
+.hero { position: relative; overflow: hidden; min-height: min(86vh, 760px); display: flex; align-items: center; border-bottom: 1px solid var(--line); }
+.hero video, .hero .poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero .poster { background: url(img/lineup.webp) center/cover; }
+.hero::after { content: ""; position: absolute; inset: 0; background:
+  radial-gradient(ellipse at 50% 45%, rgba(11,20,14,.25) 0%, rgba(11,20,14,.7) 70%),
+  linear-gradient(180deg, rgba(11,20,14,.35) 0%, rgba(11,20,14,.2) 50%, var(--bg) 100%); }
+.hero .wrap { position: relative; z-index: 1; padding: 70px 0 60px; text-align: center; }
+.badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: rgba(11,20,14,.6); backdrop-filter: blur(6px); color: var(--glow); font-weight: 700; font-size: 14px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--glow); box-shadow: 0 0 10px var(--glow); animation: blink 1.6s infinite; }
+@keyframes blink { 50% { opacity: .35; } }
+h1 { margin: 18px 0 12px; font-size: clamp(44px, 10vw, 96px); line-height: .95; font-weight: 900; letter-spacing: .04em; color: var(--gold); text-shadow: 0 4px 18px rgba(0,0,0,.65), 0 0 30px rgba(255,213,79,.25); }
+h1 span { color: var(--glow); text-shadow: 0 4px 18px rgba(0,0,0,.65), 0 0 30px rgba(95,224,138,.35); }
+.lead { margin: 0 auto 6px; font-size: clamp(22px, 3.6vw, 32px); font-weight: 900; text-shadow: 0 2px 8px rgba(0,0,0,.8); }
+.lead2 { margin: 0 auto 30px; max-width: 620px; font-size: clamp(16px, 2.2vw, 19px); font-weight: 600; color: #d6e8d9; text-shadow: 0 2px 6px rgba(0,0,0,.8); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 28px; border-radius: 16px; font-weight: 900; font-size: 18px; text-decoration: none; transition: transform .15s; }
+.btn:hover { transform: translateY(-2px) scale(1.02); }
+.btn-play { position: relative; overflow: hidden; background: linear-gradient(180deg, var(--gold), var(--gold-d)); color: #1b1b1b; font-size: 22px; padding: 0 46px; min-height: 64px; animation: pulse 2.2s infinite; }
+.btn-play::after { content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.65), transparent); transform: skewX(-20deg); animation: shine 3.2s infinite; }
+@keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,213,79,.55), 0 6px 24px rgba(255,213,79,.35); } 60% { box-shadow: 0 0 0 16px rgba(255,213,79,0), 0 6px 24px rgba(255,213,79,.35); } }
+@keyframes shine { 0%, 55% { left: -60%; } 85%, 100% { left: 130%; } }
+.also { margin-top: 16px; font-size: 14px; color: #cfe3d3; text-shadow: 0 1px 4px #000; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: rgba(11,20,14,.6); border: 1px solid var(--line); color: var(--ink); text-decoration: none; font-weight: 700; backdrop-filter: blur(6px); }
+.chip:hover { border-color: var(--glow); }
+.chip svg { width: 16px; height: 16px; color: #fa5c5c; }
+.facts { display: inline-flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; margin: 0 0 18px; padding: 7px 16px; border-radius: 999px; background: rgba(11,20,14,.55); border: 1px solid var(--line); backdrop-filter: blur(6px); font-weight: 700; font-size: 15px; }
+.facts b { color: var(--gold); font-size: 17px; }
+.facts i { font-style: normal; color: var(--glow); opacity: .7; }
+
+section { padding: clamp(50px, 8vw, 90px) 0 0; }
+.kicker { color: var(--glow); font-weight: 800; letter-spacing: .12em; font-size: 13px; text-transform: uppercase; }
+h2 { margin: 6px 0 8px; font-size: clamp(28px, 4.4vw, 42px); line-height: 1.1; font-weight: 900; }
+.sub { margin: 0 0 28px; color: var(--muted); font-size: 17px; }
+
+/* Арсенал: большая карточка + переключатель */
+.arsenal { display: grid; grid-template-columns: 1.35fr 1fr; border-radius: var(--radius); overflow: hidden; background: var(--card); border: 1px solid var(--line); box-shadow: 0 0 40px rgba(95,224,138,.08); }
+@media (max-width: 860px) { .arsenal { grid-template-columns: 1fr; } }
+.stage { position: relative; min-height: 340px; background: radial-gradient(ellipse at 50% 70%, #2c4a33 0%, #132219 70%); overflow: hidden; }
+.stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .35s, transform .6s; }
+.stage img.out { opacity: 0; transform: scale(1.04); }
+.stage iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: transparent; }
+.stage .tags { position: absolute; top: 14px; left: 14px; display: flex; gap: 8px; z-index: 2; }
+.tag { padding: 4px 10px; border-radius: 9px; font-weight: 800; font-size: 12.5px; color: #fff; backdrop-filter: blur(6px); }
+.tag.ussr { background: rgba(198,40,40,.85); }
+.tag.germany { background: rgba(69,90,100,.9); }
+.tag.cls, .tag.era { background: rgba(11,20,14,.72); color: var(--gold); border: 1px solid rgba(255,213,79,.35); }
+.btn3d { position: absolute; right: 14px; bottom: 14px; z-index: 2; display: inline-flex; gap: 8px; align-items: center; padding: 9px 16px; border-radius: 12px; cursor: pointer;
+  background: rgba(11,20,14,.72); border: 1px solid rgba(95,224,138,.6); color: var(--ink); font: 800 14px system-ui; backdrop-filter: blur(6px); box-shadow: 0 0 18px rgba(95,224,138,.25); }
+.btn3d:hover { background: rgba(30,60,40,.9); }
+.rot { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); z-index: 2; display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; pointer-events: none;
+  background: rgba(11,20,14,.55); border: 1px solid rgba(95,224,138,.55); color: var(--ink); font: 800 14px system-ui; backdrop-filter: blur(4px); opacity: 0; transition: opacity .25s; }
+.rot svg { width: 22px; height: 22px; color: var(--glow); animation: spin 2.4s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.stage.pic { cursor: pointer; }
+.stage.pic:hover .rot { opacity: 1; }
+@media (hover: none) { .stage.pic .rot { opacity: .9; top: auto; bottom: 14px; left: 14px; transform: none; } }
+.btn3d { animation: glow3d 2.6s ease-in-out infinite; }
+@keyframes glow3d { 50% { box-shadow: 0 0 26px rgba(95,224,138,.55); } }
+.hint3d { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 2; font-size: 13px; color: #d6e8d9; background: rgba(11,20,14,.6); padding: 4px 10px; border-radius: 8px; pointer-events: none; display: none; }
+.info { padding: 26px 26px 24px; display: flex; flex-direction: column; min-width: 0; }
+.info h3 { margin: 0; font-size: 30px; color: var(--gold); line-height: 1.1; }
+.info .full { margin: 4px 0 12px; color: var(--muted); font-size: 14px; }
+.info p { margin: 0 0 18px; }
+.stats { display: grid; grid-template-columns: auto 1fr auto; gap: 9px 12px; margin: 0 0 20px; font-size: 14px; align-items: center; }
+.stats dt { color: var(--muted); }
+.stats dd { margin: 0; }
+.stats .v { font-weight: 800; text-align: right; white-space: nowrap; }
+.stats .v small { color: var(--muted); font-weight: 600; }
+.bar { height: 7px; border-radius: 4px; background: rgba(255,255,255,.08); overflow: hidden; }
+.bar span { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--glow), var(--gold)); transition: width .5s; }
+.tabs { display: flex; gap: 8px; margin-top: auto; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 2px 2px 4px; -webkit-mask: linear-gradient(90deg, #000 88%, transparent); mask: linear-gradient(90deg, #000 88%, transparent); }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs button { flex: 0 0 auto; scroll-snap-align: start; width: 84px; padding: 0 0 6px; border: 1px solid var(--line); background: var(--glass); color: var(--ink); border-radius: 12px; font: 700 12px/1.2 system-ui; cursor: pointer; overflow: hidden; transition: border-color .15s, box-shadow .15s; }
+.tabs button .th { display: block; height: 46px; margin-bottom: 5px; background-size: 175%; background-position: 50% 62%; }
+.tabs button .n { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 4px; vertical-align: 1px; }
+.tabs button .n.ussr { background: #e53935; } .tabs button .n.germany { background: #90a4ae; }
+.tabs button:hover { border-color: rgba(95,224,138,.6); }
+.tabs button[aria-selected="true"] { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold), 0 0 16px rgba(255,213,79,.35); color: var(--gold); }
+.more { text-align: center; margin: 22px 0 0; font-weight: 800; }
+.more a { text-decoration: none; }
+
+/* Бенто-сетка возможностей */
+.bento { display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: minmax(150px, auto); gap: 16px; }
+.b { position: relative; border-radius: var(--radius); overflow: hidden; background: var(--card); border: 1px solid var(--line); display: flex; flex-direction: column; justify-content: flex-end; min-height: 230px; transition: border-color .2s, box-shadow .2s, transform .2s; }
+.b:hover { border-color: rgba(95,224,138,.65); box-shadow: 0 0 30px rgba(95,224,138,.16); transform: translateY(-3px); }
+.b img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s; }
+.b:hover img { transform: scale(1.04); }
+.b::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,20,14,0) 30%, rgba(11,20,14,.92) 100%); }
+.b .txt { position: relative; z-index: 1; padding: 18px 20px; }
+.b h3 { margin: 0 0 4px; font-size: 21px; color: var(--gold); }
+.b p { margin: 0; color: #cfe0d2; font-size: 15px; }
+.b.big { grid-column: span 4; grid-row: span 2; }
+.b.big h3 { font-size: 28px; }
+.b.w2 { grid-column: span 2; }
+.b.w3 { grid-column: span 3; }
+.b.plain { justify-content: center; background: radial-gradient(ellipse at 30% 0%, #26462f, #12211a); }
+.b.plain::after { display: none; }
+.b .num { font-size: 54px; font-weight: 900; color: var(--glow); line-height: 1; text-shadow: 0 0 22px rgba(95,224,138,.4); }
+@media (max-width: 900px) { .b.big { grid-column: span 6; } .b.w2 { grid-column: span 3; } .b.w3 { grid-column: span 6; } }
+@media (max-width: 560px) { .bento { grid-template-columns: 1fr; } .b.big, .b.w2, .b.w3 { grid-column: auto; grid-row: auto; } .b.big { min-height: 300px; } }
+
+/* Режимы */
+.modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 800px) { .modes { grid-template-columns: 1fr; } }
+.mode { padding: 24px; border-radius: var(--radius); background: var(--card); border: 1px solid var(--line); }
+.mode .ic { font-size: 34px; }
+.mode h3 { margin: 6px 0 4px; font-size: 21px; color: var(--gold); }
+.mode p { margin: 0; color: var(--muted); }
+.mode.hot { border-color: rgba(95,224,138,.7); box-shadow: 0 0 30px rgba(95,224,138,.2); }
+
+/* Телефон под наклоном */
+.phone { display: grid; grid-template-columns: 1fr 320px; gap: 30px; align-items: center; padding: 30px; border-radius: var(--radius); background: var(--card); border: 1px solid var(--line); overflow: hidden; }
+.phone ul { margin: 16px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.phone li { padding-left: 30px; position: relative; }
+.phone li::before { content: "✔"; position: absolute; left: 0; color: var(--glow); font-weight: 900; }
+.device { position: relative; perspective: 1100px; height: 440px; display: grid; place-items: center; }
+.device img { width: 210px; height: auto; border-radius: 28px; border: 7px solid #070b08; transform: rotateY(-22deg) rotateX(8deg) rotateZ(2deg); box-shadow: 30px 30px 60px rgba(0,0,0,.55), 0 0 40px rgba(95,224,138,.18); transition: transform .6s; }
+.device:hover img { transform: rotateY(-8deg) rotateX(4deg); }
+.float { position: absolute; display: grid; place-items: center; width: 62px; height: 62px; border-radius: 50%; font-size: 26px; backdrop-filter: blur(8px); animation: bob 3.4s ease-in-out infinite; }
+.float.joy { left: 0; bottom: 70px; background: rgba(95,224,138,.18); border: 2px solid rgba(95,224,138,.8); box-shadow: 0 0 22px rgba(95,224,138,.5); }
+.float.fire { right: 0; bottom: 120px; background: rgba(229,57,53,.3); border: 2px solid rgba(255,120,110,.9); box-shadow: 0 0 22px rgba(229,57,53,.5); animation-delay: -1.2s; }
+.float.chat { right: 26px; top: 40px; width: 50px; height: 50px; font-size: 22px; background: rgba(255,213,79,.18); border: 2px solid rgba(255,213,79,.8); box-shadow: 0 0 22px rgba(255,213,79,.4); animation-delay: -2.2s; }
+@keyframes bob { 50% { transform: translateY(-10px); } }
+@media (max-width: 760px) { .phone { grid-template-columns: 1fr; } .device { height: 400px; } }
+
+/* Строй танков */
+.wide { position: relative; margin-top: 16px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); }
+.wide img { display: block; width: 100%; height: auto; aspect-ratio: 21/9; object-fit: cover; object-position: 50% 62%; }
+.wide figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 30px 20px 16px; background: linear-gradient(180deg, transparent, rgba(11,20,14,.9)); font-weight: 700; }
+
+/* Новости и вопросы */
+.news { display: grid; gap: 12px; }
+.item { display: grid; grid-template-columns: 110px 1fr; gap: 16px; padding: 16px 18px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); }
+.item time { color: var(--glow); font-weight: 800; font-size: 14px; }
+.item h3 { margin: 0 0 2px; font-size: 17px; }
+.item p { margin: 0; color: var(--muted); font-size: 15px; }
+@media (max-width: 560px) { .item { grid-template-columns: 1fr; gap: 4px; } }
+details { border-radius: 14px; background: var(--card); border: 1px solid var(--line); padding: 14px 18px; margin-bottom: 10px; }
+summary { cursor: pointer; font-weight: 800; }
+details p { margin: 8px 0 0; color: var(--muted); }
+
+/* Финал: стеклянная панель, круглые значки */
+.final { margin-top: clamp(50px, 8vw, 90px); text-align: center; padding: 44px 20px; border-radius: 28px; background: var(--glass); border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(14px); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 0 50px rgba(95,224,138,.08); }
+.rounds { display: flex; gap: 22px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
+.round { display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--ink); text-decoration: none; font-weight: 700; font-size: 14px; }
+.round i { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; color: #fff;
+  background: var(--c); border: 2px solid rgba(255,255,255,.25); box-shadow: 0 0 18px color-mix(in srgb, var(--c) 45%, transparent); transition: transform .15s, box-shadow .2s; }
+.round:hover i { transform: translateY(-3px) scale(1.06); box-shadow: 0 0 0 3px rgba(255,255,255,.18), 0 0 28px var(--c); }
+.round svg { width: 30px; height: 30px; }
+@media (max-width: 480px) {
+  .facts { font-size: 13px; gap: 4px 12px; padding: 7px 14px; border-radius: 16px; }
+  .facts b { font-size: 15px; }
+  .facts i { display: none; }
+  .btn-play { font-size: 19px; padding: 0 26px; min-height: 58px; white-space: nowrap; }
+  .stage { min-height: 0; aspect-ratio: 16/11; }
+  .info { padding: 20px 18px; }
+  .info h3 { font-size: 26px; }
+  .rounds { gap: 14px; }
+  .round i { width: 56px; height: 56px; }
+  .round svg { width: 26px; height: 26px; }
+  .b.big h3 { font-size: 23px; }
+}
+.pp-badge { display: inline-block; margin-top: 26px; opacity: .9; transition: opacity .2s; }
+.pp-badge:hover { opacity: 1; }
+.pp-badge img { display: block; max-width: 100%; height: auto; }
+.also .chip + .chip { margin-left: 4px; }
+footer { margin-top: 50px; border-top: 1px solid var(--line); padding: 20px 0 30px; color: var(--muted); font-size: 14px; text-align: center; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#">BLOCKY <span>TANKS</span></a>
+    <nav>
+      <a href="#arsenal" data-i18n="Арсенал|Arsenal">Арсенал</a>
+      <a href="#features" data-i18n="Возможности|Features">Возможности</a>
+      <a href="#modes" data-i18n="Режимы|Modes">Режимы</a>
+      <a href="#news" data-i18n="Новости|News">Новости</a>
+      <a href="#faq" data-i18n="Вопросы|FAQ">Вопросы</a>
+    </nav>
+    <a class="mini-play" href="../" data-i18n="Играть|Play">Играть</a>
+    <button class="lang" id="lang" type="button">EN</button>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="poster"></div>
+  <video id="hero-video" autoplay muted loop playsinline preload="metadata" poster="media/hero-poster.jpg" aria-hidden="true">
+    <source src="media/hero.webm" type="video/webm">
+    <source src="media/hero.mp4" type="video/mp4">
+  </video>
+  <div class="wrap">
+    <div class="badge"><span class="dot"></span><span data-i18n="Онлайн-бои открыты · версия 0.16|Online battles are live · version 0.16">Онлайн-бои открыты · версия 0.16</span></div>
+    <h1>BLOCKY <span>TANKS</span></h1>
+    <div class="facts"><span><b>28</b> <span data-i18n="машин по чертежам|blueprint tanks">машин по чертежам</span></span><i>•</i><span><b>13</b> <span data-i18n="карт сражений|battle maps">карт сражений</span></span><i>•</i><span><b>8</b> <span data-i18n="игроков онлайн|players online">игроков онлайн</span></span></div>
+    <p class="lead" data-i18n="Заходи и играй за 2 секунды.|Jump in and play in 2 seconds.">Заходи и играй за 2 секунды.</p>
+    <p class="lead2" data-i18n="Танковые бои Второй мировой на ПК и телефоне. Без скачивания и регистрации.|WW2 tank battles on PC and mobile. No download, no sign-up.">Танковые бои Второй мировой на ПК и телефоне. Без скачивания и регистрации.</p>
+    <a class="btn btn-play" href="../">▶ <span data-i18n="Играть|Play now">Играть</span></a>
+    <div class="also"><span data-i18n="Также на|Also on">Также на</span> <a class="chip" href="https://romaniskz.itch.io/blocky-tanks" rel="noopener"><svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.13 1.338C2.08 1.96.02 4.328 0 4.95v1.03c0 1.303 1.22 2.45 2.325 2.45 1.33 0 2.436-1.102 2.436-2.41 0 1.308 1.07 2.41 2.4 2.41 1.328 0 2.362-1.102 2.362-2.41 0 1.308 1.137 2.41 2.466 2.41h.024c1.33 0 2.466-1.102 2.466-2.41 0 1.308 1.034 2.41 2.363 2.41 1.33 0 2.4-1.102 2.4-2.41 0 1.308 1.106 2.41 2.435 2.41C22.78 8.43 24 7.282 24 5.98V4.95c-.02-.62-2.082-2.99-3.13-3.612-3.253-.114-5.508-.134-8.87-.133-3.362 0-7.945.053-8.87.133zm6.376 6.477a2.74 2.74 0 0 1-.468.602c-.5.49-1.19.795-1.947.795a2.786 2.786 0 0 1-1.95-.795c-.182-.178-.32-.37-.446-.59-.127.222-.303.412-.486.59a2.788 2.788 0 0 1-1.95.795c-.092 0-.187-.025-.264-.052-.107 1.113-.152 2.176-.168 2.95v.005l-.006 1.167c.02 2.334-.23 7.564 1.03 8.85 1.952.454 5.545.662 9.15.663 3.605 0 7.198-.21 9.15-.664 1.26-1.284 1.01-6.514 1.03-8.848l-.006-1.167v-.004c-.016-.775-.06-1.838-.168-2.95-.077.026-.172.052-.263.052a2.788 2.788 0 0 1-1.95-.795c-.184-.178-.36-.368-.486-.59-.127.22-.265.412-.447.59a2.786 2.786 0 0 1-1.95.794c-.76 0-1.446-.303-1.948-.793a2.74 2.74 0 0 1-.468-.602 2.738 2.738 0 0 1-.463.602 2.787 2.787 0 0 1-1.95.794h-.16a2.787 2.787 0 0 1-1.95-.793 2.738 2.738 0 0 1-.464-.602zm-2.004 2.59v.002c.795.002 1.5 0 2.373.953.687-.072 1.406-.108 2.125-.107.72 0 1.438.035 2.125.107.873-.953 1.578-.95 2.372-.953.376 0 1.876 0 2.92 2.934l1.123 4.028c.832 2.995-.266 3.068-1.636 3.07-2.03-.075-3.156-1.55-3.156-3.025-1.124.184-2.436.276-3.748.277-1.312 0-2.624-.093-3.748-.277 0 1.475-1.125 2.95-3.156 3.026-1.37-.004-2.468-.077-1.636-3.072l1.122-4.027c1.045-2.934 2.545-2.934 2.92-2.934zM12 12.714c-.002.002-2.14 1.964-2.523 2.662l1.4-.056v1.22c0 .056.56.033 1.123.007.562.026 1.124.05 1.124-.008v-1.22l1.4.055C14.138 14.677 12 12.713 12 12.713z"/></svg> itch.io</a> <a class="chip" href="https://pixelpicked.com/game/40fNZ5ObAEM/blocky-tanks" rel="noopener">🎲 PixelPicked</a></div>
+</div>
+  </div>
+</div>
+
+<main class="wrap">
+  <section id="arsenal">
+    <div class="kicker" data-i18n="Арсенал|Arsenal">Арсенал</div>
+    <h2 data-i18n="Легендарная техника. Настоящая броня.|Legendary vehicles. Real armor.">Легендарная техника. Настоящая броня.</h2>
+    <p class="sub" data-i18n="28 машин, воссозданных по историческим чертежам. Выбери свой стиль боя.|28 vehicles rebuilt from historical blueprints. Pick your fighting style.">28 машин, воссозданных по историческим чертежам. Выбери свой стиль боя.</p>
+    <div class="arsenal">
+      <div class="stage" id="stage">
+        <div class="tags"><span class="tag" id="t-nat"></span><span class="tag cls" id="t-cls"></span><span class="tag era" id="t-era"></span></div>
+        <img id="t-img" src="img/tank-t34_85.webp" alt="" width="720" height="405">
+        <div class="rot" id="rot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 4 0 0 0 18 0"/><path d="M21 12a9 4 0 0 0-14-3.3"/><path d="M7 5.5 6.5 8.8 9.8 9.4"/></svg>360°</div>
+        <button class="btn3d" id="btn3d" type="button">🔄 <span data-i18n="Покрутить в 3D|Spin in 3D">Покрутить в 3D</span></button>
+        <div class="hint3d" id="hint3d" data-i18n="Тяните влево-вправо|Drag left or right">Тяните влево-вправо</div>
+      </div>
+      <div class="info">
+        <h3 id="t-name"></h3>
+        <div class="full" id="t-full"></div>
+        <p id="t-desc"></p>
+        <dl class="stats" id="t-stats"></dl>
+        <div class="tabs" role="tablist" id="tabs"></div>
+      </div>
+    </div>
+    <p class="more"><a href="../" data-i18n="И ещё 22 машины — в игре →|22 more vehicles in the game →">И ещё 22 машины — в игре →</a></p>
+  </section>
+
+  <section id="features">
+    <div class="kicker" data-i18n="Возможности|Features">Возможности</div>
+    <h2 data-i18n="Простая графика. Серьёзные бои.|Simple graphics. Serious battles.">Простая графика. Серьёзные бои.</h2>
+    <p class="sub" data-i18n="Всё снято в самой игре.|Everything captured in-game.">Всё снято в самой игре.</p>
+    <div class="bento">
+      <article class="b big"><img src="img/online.webp" alt="Онлайн-бой" loading="lazy" width="800" height="450">
+        <div class="txt"><h3 data-i18n="Онлайн-бои до 8 игроков|Online battles for up to 8">Онлайн-бои до 8 игроков</h3><p data-i18n="Команда на команду, с компьютера и телефона в одном бою. Свободные места займут боты — бой начинается сразу.|Team vs team, PC and mobile players in the same match. Bots fill empty slots so the battle starts right away.">Команда на команду, с компьютера и телефона в одном бою. Свободные места займут боты — бой начинается сразу.</p></div></article>
+      <article class="b plain w2"><div class="txt"><div class="num">2 <small style="font-size:22px" data-i18n="сек|sec">сек</small></div><h3 data-i18n="До первого боя|To your first battle">До первого боя</h3><p data-i18n="Открыл ссылку — играешь. Ничего не нужно устанавливать.|Open the link and play. Nothing to install.">Открыл ссылку — играешь. Ничего не нужно устанавливать.</p></div></article>
+      <article class="b w2"><img src="img/armor.webp" alt="Схема брони Т-34-85 и Пантеры" loading="lazy" width="820" height="335" style="object-position:50% 30%">
+        <div class="txt"><h3 data-i18n="Броня и снаряды|Armor and shells">Броня и снаряды</h3><p data-i18n="Настоящие толщины листов. ББ, БП и ОФ, наклон, рикошеты.|Real plate thickness. AP, APCR and HE, slope, ricochets.">Настоящие толщины листов. ББ, БП и ОФ, наклон, рикошеты.</p></div></article>
+      <article class="b w3"><img src="img/maps.webp" alt="Карта сверху" loading="lazy" width="800" height="560">
+        <div class="txt"><h3 data-i18n="13 карт сражений|13 battle maps">13 карт сражений</h3><p data-i18n="Прохоровка, Сталинград, Ладожский лёд, Зееловские высоты… Погода, артобстрел, тонкий лёд, мосты. Стены рушатся от фугасов, заборы — от тарана.|Prokhorovka, Stalingrad, Lake Ladoga ice, Seelow Heights… Weather, artillery, thin ice, bridges. HE shells bring walls down, tanks ram through fences.">Прохоровка, Сталинград, Ладожский лёд, Зееловские высоты… Погода, артобстрел, тонкий лёд, мосты. Стены рушатся от фугасов, заборы — от тарана.</p></div></article>
+      <article class="b w3"><img src="img/quick.webp" alt="Колесо быстрых команд" loading="lazy" width="800" height="450">
+        <div class="txt"><h3 data-i18n="Быстрые команды|Quick commands">Быстрые команды</h3><p data-i18n="«Атакую!», «Нужна помощь», метка «Сюда!» — в одно движение. Фразы переводятся на язык каждого игрока.|“Attacking!”, “Need help”, a “Here!” marker — in one move. Phrases are translated for every player.">«Атакую!», «Нужна помощь», метка «Сюда!» — в одно движение. Фразы переводятся на язык каждого игрока.</p></div></article>
+    </div>
+  </section>
+
+  <section id="modes">
+    <div class="kicker" data-i18n="Режимы|Modes">Режимы</div>
+    <h2 data-i18n="Хоть на пять минут|Even for five minutes">Хоть на пять минут</h2>
+    <p class="sub" data-i18n="Опыт, задания и T-Coin начисляются в любом режиме.|XP, missions and T-Coin are earned in every mode.">Опыт, задания и T-Coin начисляются в любом режиме.</p>
+    <div class="modes">
+      <div class="mode"><div class="ic">🤖</div><h3 data-i18n="Одиночная игра|Single player">Одиночная игра</h3><p data-i18n="Бой с ботами на любой карте. Работает даже без интернета.|Battle bots on any map. Works even offline.">Бой с ботами на любой карте. Работает даже без интернета.</p></div>
+      <div class="mode"><div class="ic">📖</div><h3 data-i18n="Кампания|Campaign">Кампания</h3><p data-i18n="Экипаж в войне 1941–45. Глава 1: «Отступление».|A crew through the war of 1941–45. Chapter 1: “Retreat”.">Экипаж в войне 1941–45. Глава 1: «Отступление».</p></div>
+      <div class="mode hot"><div class="ic">🌐</div><h3 data-i18n="Мультиплеер|Multiplayer">Мультиплеер</h3><p data-i18n="Живые игроки онлайн, до 8 в бою. Сервер сам выбирает карту.|Live players online, up to 8 per battle. The server picks the map.">Живые игроки онлайн, до 8 в бою. Сервер сам выбирает карту.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="phone">
+      <div>
+        <div class="kicker" data-i18n="Телефон|Mobile">Телефон</div>
+        <h2 data-i18n="Бой в кармане|Battle in your pocket">Бой в кармане</h2>
+        <p class="sub" style="margin:0" data-i18n="Откройте ссылку в браузере телефона — и в бой. Android и iPhone.|Open the link in your phone's browser and go. Android and iPhone.">Откройте ссылку в браузере телефона — и в бой. Android и iPhone.</p>
+        <ul>
+          <li data-i18n="Джойстик и кнопки под большой палец|Joystick and thumb-sized buttons">Джойстик и кнопки под большой палец</li>
+          <li data-i18n="Быстрые команды — кнопка 💬|Quick commands — the 💬 button">Быстрые команды — кнопка 💬</li>
+          <li data-i18n="Онлайн-бои вместе с игроками на ПК|Online battles together with PC players">Онлайн-бои вместе с игроками на ПК</li>
+        </ul>
+      </div>
+      <div class="device">
+        <img src="img/mobile.webp" alt="Blocky Tanks на телефоне" loading="lazy" width="500" height="992">
+        <span class="float joy" aria-hidden="true">🕹️</span>
+        <span class="float fire" aria-hidden="true">💥</span>
+        <span class="float chat" aria-hidden="true">💬</span>
+      </div>
+    </div>
+    <figure class="wide" style="margin-left:0;margin-right:0">
+      <img src="img/lineup.webp" alt="Строй танков СССР и Германии" loading="lazy" width="1600" height="940">
+      <figcaption data-i18n="Тигр, Пантера, Королевский тигр, ИС-2, Т-34-85 — и ещё 23 машины СССР и Германии 1941–45.|Tiger, Panther, King Tiger, IS-2, T-34-85 — and 23 more Soviet and German vehicles of 1941–45.">Тигр, Пантера, Королевский тигр, ИС-2, Т-34-85 — и ещё 23 машины СССР и Германии 1941–45.</figcaption>
+    </figure>
+  </section>
+
+  <section id="news">
+    <div class="kicker" data-i18n="Новости|News">Новости</div>
+    <h2 data-i18n="Обновления каждую неделю|Updates every week">Обновления каждую неделю</h2>
+    <p class="sub"><span data-i18n="Все новости — в|All news in">Все новости — в</span> <a href="https://t.me/blockytanks" rel="noopener">Telegram</a> <span data-i18n="и|and">и</span> <a href="https://vk.ru/blockytanks" rel="noopener">VK</a>.</p>
+    <div class="news">
+      <div class="item"><time datetime="2026-10-19">19.10.2026</time><div><h3 data-i18n="0.16 — быстрые команды|0.16 — Quick commands">0.16 — быстрые команды</h3><p data-i18n="Колесо фраз союзникам (C на ПК, 💬 на телефоне) и метка «Сюда!» на карте.|A phrase wheel for allies (C on PC, 💬 on mobile) and a “Here!” map marker.">Колесо фраз союзникам (C на ПК, 💬 на телефоне) и метка «Сюда!» на карте.</p></div></div>
+      <div class="item"><time datetime="2026-10-18">18.10.2026</time><div><h3 data-i18n="0.15 — онлайн-бои|0.15 — Online battles">0.15 — онлайн-бои</h3><p data-i18n="Мультиплеер до 8 игроков, случайные карты, новые комнаты открываются сами.|Multiplayer for up to 8 players, random maps, new rooms open automatically.">Мультиплеер до 8 игроков, случайные карты, новые комнаты открываются сами.</p></div></div>
+      <div class="item"><time datetime="2026-10-14">14.10.2026</time><div><h3 data-i18n="0.12 — Королевский тигр и Т-44|0.12 — King Tiger and T-44">0.12 — Королевский тигр и Т-44</h3><p data-i18n="Новые машины по чертежам и баланс эпохи 1943–45.|New blueprint-accurate vehicles and 1943–45 balance.">Новые машины по чертежам и баланс эпохи 1943–45.</p></div></div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="kicker" data-i18n="Вопросы|FAQ">Вопросы</div>
+    <h2 data-i18n="Коротко о главном|The short version">Коротко о главном</h2>
+    <details><summary data-i18n="Игра бесплатная?|Is it free?">Игра бесплатная?</summary><p data-i18n="Да, полностью. Без регистрации и скачивания.|Yes, completely. No sign-up, no download.">Да, полностью. Без регистрации и скачивания.</p></details>
+    <details><summary data-i18n="На чём можно играть?|What can I play on?">На чём можно играть?</summary><p data-i18n="На компьютере (Chrome, Edge, Firefox, Яндекс Браузер) и на телефоне — Android и iPhone, прямо в браузере.|On PC (Chrome, Edge, Firefox) and on phones — Android and iPhone, right in the browser.">На компьютере (Chrome, Edge, Firefox, Яндекс Браузер) и на телефоне — Android и iPhone, прямо в браузере.</p></details>
+    <details><summary data-i18n="Как играть с друзьями?|How do I play with friends?">Как играть с друзьями?</summary><p data-i18n="Нажмите «Мультиплеер» в меню. Если зайти одновременно, вы попадёте в одну комнату. Общие сборы объявляем в Telegram.|Press “Multiplayer” in the menu. Join at the same time to land in the same room. Group battles are announced in Telegram.">Нажмите «Мультиплеер» в меню. Если зайти одновременно, вы попадёте в одну комнату. Общие сборы объявляем в Telegram.</p></details>
+    <details><summary data-i18n="Нашёл ошибку или есть идея — куда писать?|Found a bug or have an idea?">Нашёл ошибку или есть идея — куда писать?</summary><p data-i18n="Кнопка «Отзыв» в меню игры или комментарии в Telegram и VK. Читаем всё.|Use the “Feedback” button in the game menu, or comment in Telegram and VK. We read everything.">Кнопка «Отзыв» в меню игры или комментарии в Telegram и VK. Читаем всё.</p></details>
+  </section>
+
+  <div class="final" id="final">
+    <h2 data-i18n="Готовы к бою?|Ready for battle?">Готовы к бою?</h2>
+    <p class="sub" data-i18n="Первый бой — через пару секунд после нажатия.|Your first battle is seconds away.">Первый бой — через пару секунд после нажатия.</p>
+    <a class="btn btn-play" href="../">▶ <span data-i18n="Играть бесплатно|Play for free">Играть бесплатно</span></a>
+    <div class="rounds"><a class="round" href="https://t.me/blockytanks" rel="noopener"><i style="--c:#26a5e4"><svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></i>Telegram</a>
+      <a class="round" href="https://vk.ru/blockytanks" rel="noopener"><i style="--c:#0077ff"><svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m9.489.004.729-.003h3.564l.73.003.914.01.433.007.418.011.403.014.388.016.374.021.36.025.345.03.333.033c1.74.196 2.933.616 3.833 1.516.9.9 1.32 2.092 1.516 3.833l.034.333.029.346.025.36.02.373.025.588.012.41.013.644.009.915.004.98-.001 3.313-.003.73-.01.914-.007.433-.011.418-.014.403-.016.388-.021.374-.025.36-.03.345-.033.333c-.196 1.74-.616 2.933-1.516 3.833-.9.9-2.092 1.32-3.833 1.516l-.333.034-.346.029-.36.025-.373.02-.588.025-.41.012-.644.013-.915.009-.98.004-3.313-.001-.73-.003-.914-.01-.433-.007-.418-.011-.403-.014-.388-.016-.374-.021-.36-.025-.345-.03-.333-.033c-1.74-.196-2.933-.616-3.833-1.516-.9-.9-1.32-2.092-1.516-3.833l-.034-.333-.029-.346-.025-.36-.02-.373-.025-.588-.012-.41-.013-.644-.009-.915-.004-.98.001-3.313.003-.73.01-.914.007-.433.011-.418.014-.403.016-.388.021-.374.025-.36.03-.345.033-.333c.196-1.74.616-2.933 1.516-3.833.9-.9 2.092-1.32 3.833-1.516l.333-.034.346-.029.36-.025.373-.02.588-.025.41-.012.644-.013.915-.009ZM6.79 7.3H4.05c.13 6.24 3.25 9.99 8.72 9.99h.31v-3.57c2.01.2 3.53 1.67 4.14 3.57h2.84c-.78-2.84-2.83-4.41-4.11-5.01 1.28-.74 3.08-2.54 3.51-4.98h-2.58c-.56 1.98-2.22 3.78-3.8 3.95V7.3H10.5v6.92c-1.6-.4-3.62-2.34-3.71-6.92Z"/></svg></i>VK</a>
+      <a class="round" href="https://romaniskz.itch.io/blocky-tanks" rel="noopener"><i style="--c:#fa5c5c"><svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.13 1.338C2.08 1.96.02 4.328 0 4.95v1.03c0 1.303 1.22 2.45 2.325 2.45 1.33 0 2.436-1.102 2.436-2.41 0 1.308 1.07 2.41 2.4 2.41 1.328 0 2.362-1.102 2.362-2.41 0 1.308 1.137 2.41 2.466 2.41h.024c1.33 0 2.466-1.102 2.466-2.41 0 1.308 1.034 2.41 2.363 2.41 1.33 0 2.4-1.102 2.4-2.41 0 1.308 1.106 2.41 2.435 2.41C22.78 8.43 24 7.282 24 5.98V4.95c-.02-.62-2.082-2.99-3.13-3.612-3.253-.114-5.508-.134-8.87-.133-3.362 0-7.945.053-8.87.133zm6.376 6.477a2.74 2.74 0 0 1-.468.602c-.5.49-1.19.795-1.947.795a2.786 2.786 0 0 1-1.95-.795c-.182-.178-.32-.37-.446-.59-.127.222-.303.412-.486.59a2.788 2.788 0 0 1-1.95.795c-.092 0-.187-.025-.264-.052-.107 1.113-.152 2.176-.168 2.95v.005l-.006 1.167c.02 2.334-.23 7.564 1.03 8.85 1.952.454 5.545.662 9.15.663 3.605 0 7.198-.21 9.15-.664 1.26-1.284 1.01-6.514 1.03-8.848l-.006-1.167v-.004c-.016-.775-.06-1.838-.168-2.95-.077.026-.172.052-.263.052a2.788 2.788 0 0 1-1.95-.795c-.184-.178-.36-.368-.486-.59-.127.22-.265.412-.447.59a2.786 2.786 0 0 1-1.95.794c-.76 0-1.446-.303-1.948-.793a2.74 2.74 0 0 1-.468-.602 2.738 2.738 0 0 1-.463.602 2.787 2.787 0 0 1-1.95.794h-.16a2.787 2.787 0 0 1-1.95-.793 2.738 2.738 0 0 1-.464-.602zm-2.004 2.59v.002c.795.002 1.5 0 2.373.953.687-.072 1.406-.108 2.125-.107.72 0 1.438.035 2.125.107.873-.953 1.578-.95 2.372-.953.376 0 1.876 0 2.92 2.934l1.123 4.028c.832 2.995-.266 3.068-1.636 3.07-2.03-.075-3.156-1.55-3.156-3.025-1.124.184-2.436.276-3.748.277-1.312 0-2.624-.093-3.748-.277 0 1.475-1.125 2.95-3.156 3.026-1.37-.004-2.468-.077-1.636-3.072l1.122-4.027c1.045-2.934 2.545-2.934 2.92-2.934zM12 12.714c-.002.002-2.14 1.964-2.523 2.662l1.4-.056v1.22c0 .056.56.033 1.123.007.562.026 1.124.05 1.124-.008v-1.22l1.4.055C14.138 14.677 12 12.713 12 12.713z"/></svg></i>itch.io</a>
+      <a class="round" href="https://youtu.be/6dw4In7WMAY" rel="noopener"><i style="--c:#ff0000"><svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></i><span data-i18n="Трейлер|Trailer">Трейлер</span></a></div>
+    <a class="pp-badge" href="https://pixelpicked.com/game/40fNZ5ObAEM/blocky-tanks" rel="noopener"><img src="https://api.pixelpicked.com/api/badges/40fNZ5ObAEM/live.png?theme=dark" width="250" height="54" alt="Approved on PixelPicked" loading="lazy"></a>
+  </div>
+</main>
+
+<noscript><div><img src="https://mc.yandex.ru/watch/113669445" style="position:absolute;left:-9999px" alt=""></div></noscript>
+<footer>
+  <div class="wrap">Blocky Tanks · <span data-i18n="инди-игра про танки Второй мировой|an indie WW2 tank game">инди-игра про танки Второй мировой</span> · © 2026</div>
+</footer>
+
+<script>
+(function () {
+  // Цифры — из характеристик машин в игре (docs/vehicles/vehicles.json): калибр, пробитие ББ на 100 м, лоб корпуса, прочность, скорость
+  var TANKS = [
+    { id: 't34_85', tabRu: 'Т-34-85', tabEn: 'T-34-85', ru: 'Т-34-85', en: 'T-34-85', fullRu: 'Т-34-85 обр. 1944', fullEn: 'T-34-85 model 1944', nat: 'ussr', cls: ['СТ', 'Medium'], era: '1943–45',
+      cal: 85, pen: 120, arm: 45, hp: 260, spd: 49,
+      dRu: 'Самый массовый танк войны с новой башней и 85-мм пушкой. Быстрый и универсальный — для любой задачи.',
+      dEn: 'The war’s most-produced tank with a new turret and an 85 mm gun. Fast and versatile — fits any job.' },
+    { id: 'tiger1', tabRu: 'Тигр', tabEn: 'Tiger', ru: 'Тигр', en: 'Tiger', fullRu: 'Pz.Kpfw. VI «Тигр» Ausf. H1', fullEn: 'Pz.Kpfw. VI Tiger Ausf. H1', nat: 'germany', cls: ['ТТ', 'Heavy'], era: '1943–45',
+      cal: 88, pen: 138, arm: 100, hp: 324, spd: 29,
+      dRu: 'Знаменитая 88-мм пушка и 100 мм брони во лбу. Опасен на любой дистанции.',
+      dEn: 'The famous 88 mm gun and 100 mm of frontal armor. Deadly at any range.' },
+    { id: 'is2', tabRu: 'ИС-2', tabEn: 'IS-2', ru: 'ИС-2', en: 'IS-2', fullRu: 'ИС-2 обр. 1944', fullEn: 'IS-2 model 1944', nat: 'ussr', cls: ['ТТ', 'Heavy'], era: '1943–45',
+      cal: 122, pen: 160, arm: 120, hp: 310, spd: 31,
+      dRu: '122-мм орудие — самый мощный разовый урон среди танков игры. Прорывает любую оборону.',
+      dEn: 'A 122 mm gun — the hardest-hitting single shot among the game’s tanks. Breaks any defense.' },
+    { id: 'panther', tabRu: 'Пантера', tabEn: 'Panther', ru: 'Пантера', en: 'Panther', fullRu: 'Pz.Kpfw. V «Пантера» Ausf. D', fullEn: 'Pz.Kpfw. V Panther Ausf. D', nat: 'germany', cls: ['СТ', 'Medium'], era: '1943–45',
+      cal: 75, pen: 159, arm: 80, hp: 270, spd: 43,
+      dRu: 'Наклонная броня и длинная 75-мм пушка: точная стрельба на дальней дистанции.',
+      dEn: 'Sloped armor and a long 75 mm gun: precise long-range fire.' },
+    { id: 'tiger2', tabRu: 'Кор. тигр', tabEn: 'King Tiger', ru: 'Королевский тигр', en: 'King Tiger', fullRu: 'Pz.Kpfw. VI Ausf. B «Королевский тигр»', fullEn: 'Pz.Kpfw. VI Ausf. B King Tiger', nat: 'germany', cls: ['ТТ', 'Heavy'], era: '1943–45',
+      cal: 88, pen: 190, arm: 150, hp: 290, spd: 27,
+      dRu: '150 мм брони под наклоном и лучшее пробитие среди танков. Медленный, но грозный.',
+      dEn: '150 mm of sloped armor and the best penetration of any tank. Slow but fearsome.' },
+    { id: 'su100', tabRu: 'СУ-100', tabEn: 'SU-100', ru: 'СУ-100', en: 'SU-100', fullRu: 'СУ-100, 1944', fullEn: 'SU-100, 1944', nat: 'ussr', cls: ['ПТ-САУ', 'Tank destroyer'], era: '1943–45',
+      cal: 100, pen: 175, arm: 75, hp: 250, spd: 45,
+      dRu: 'Истребитель танков на базе Т-34-85: 100-мм пушка пробивает «Пантеру» и «Тигра» в лоб издалека.',
+      dEn: 'A tank destroyer on the T-34-85 chassis: its 100 mm gun punches through Panthers and Tigers head-on from afar.' }
+  ];
+  var MAX = { cal: 122, pen: 190, arm: 150, hp: 330, spd: 50 };
+  var STATS = [['cal', 'Калибр', 'Caliber', 'мм', 'mm'], ['pen', 'Пробитие', 'Penetration', 'мм', 'mm'], ['arm', 'Лоб корпуса', 'Front armor', 'мм', 'mm'],
+               ['hp', 'Прочность', 'Hit points', '', ''], ['spd', 'Скорость', 'Speed', 'км/ч', 'km/h']];
+  var lang = 'ru', cur = 0, in3d = false;
+  var $ = function (id) { return document.getElementById(id); };
+  var tabs = $('tabs'), img = $('t-img'), stage = $('stage');
+
+  TANKS.forEach(function (t, i) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.setAttribute('role', 'tab');
+    b.innerHTML = '<span class="th" style="background-image:url(img/tank-' + t.id + '.webp)"></span><span class="n ' + t.nat + '"></span><span class="l"></span>';
+    b.addEventListener('click', function () { show(i); track('tab', { tank: t.id }); goal('tank_tab'); });
+    tabs.appendChild(b);
+  });
+
+  function show(i) {
+    cur = i;
+    var t = TANKS[i], en = lang === 'en';
+    [].forEach.call(tabs.children, function (b, k) { b.querySelector('.l').textContent = en ? TANKS[k].tabEn : TANKS[k].tabRu; b.setAttribute('aria-selected', k === i); });
+    $('t-name').textContent = en ? t.en : t.ru;
+    $('t-full').textContent = en ? t.fullEn : t.fullRu;
+    $('t-desc').textContent = en ? t.dEn : t.dRu;
+    var nat = $('t-nat'); nat.className = 'tag ' + t.nat; nat.textContent = t.nat === 'ussr' ? (en ? 'USSR' : 'СССР') : (en ? 'Germany' : 'Германия');
+    $('t-cls').textContent = en ? t.cls[1] : t.cls[0];
+    $('t-era').textContent = t.era;
+    $('t-stats').innerHTML = STATS.map(function (s) {
+      return '<dt>' + (en ? s[2] : s[1]) + '</dt><dd><div class="bar"><span style="width:' + Math.round(t[s[0]] / MAX[s[0]] * 100) + '%"></span></div></dd>' +
+        '<dd class="v">' + t[s[0]] + (s[3] ? ' <small>' + (en ? s[4] : s[3]) + '</small>' : '') + '</dd>';
+    }).join('');
+    if (in3d) { open3d(); return; }
+    img.classList.add('out');
+    var src = 'img/tank-' + t.id + '.webp';
+    setTimeout(function () { img.src = src; img.alt = (en ? t.en : t.ru); img.onload = function () { img.classList.remove('out'); }; }, 180);
+  }
+
+  // 3D: сама игра в режиме витрины (?preview=showcase) — грузится только по нажатию
+  function open3d() {
+    in3d = true;
+    if (typeof track === 'function') { track('open3d', { tank: TANKS[cur].id }); goal('open_3d'); }
+    var f = stage.querySelector('iframe');
+    if (!f) { f = document.createElement('iframe'); f.title = '3D'; f.setAttribute('loading', 'lazy'); stage.appendChild(f); }
+    f.src = '../?preview=showcase&tank=' + TANKS[cur].id;
+    img.style.display = 'none';
+    stage.classList.remove('pic');
+    $('hint3d').style.display = 'block';
+    setTimeout(function () { $('hint3d').style.display = 'none'; }, 4000);
+    $('btn3d').querySelector('span').textContent = lang === 'en' ? 'Picture' : 'Картинка';
+  }
+  function close3d() {
+    in3d = false;
+    var f = stage.querySelector('iframe'); if (f) f.remove();
+    img.style.display = '';
+    stage.classList.add('pic');
+    $('btn3d').querySelector('span').textContent = lang === 'en' ? 'Spin in 3D' : 'Покрутить в 3D';
+  }
+  $('btn3d').addEventListener('click', function (e) { e.stopPropagation(); in3d ? close3d() : open3d(); });
+  stage.classList.add('pic');
+  img.addEventListener('click', function () { if (!in3d) open3d(); });
+
+  // Язык: ?lang=en / ?lang=ru, иначе по языку браузера; выбор запоминается
+  var q = new URLSearchParams(location.search).get('lang'), saved = null;
+  try { saved = localStorage.getItem('bt-landing-lang'); } catch (e) {}
+  lang = q || saved || ((navigator.language || 'ru').toLowerCase().indexOf('ru') === 0 ? 'ru' : 'en');
+  var btn = $('lang');
+  function apply(l) {
+    lang = l; document.documentElement.lang = l;
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var p = el.getAttribute('data-i18n').split('|'); el.textContent = l === 'en' ? p[1] : p[0];
+    });
+    btn.textContent = l === 'en' ? 'RU' : 'EN';
+    document.title = l === 'en' ? 'Blocky Tanks — free WW2 tank battles in your browser' : 'Blocky Tanks — танковые бои Второй мировой в браузере, бесплатно';
+    if (in3d) $('btn3d').querySelector('span').textContent = l === 'en' ? 'Picture' : 'Картинка';
+    show(cur);
+  }
+  btn.addEventListener('click', function () {
+    apply(lang === 'en' ? 'ru' : 'en');
+    track('lang', { lang: lang });
+    try { localStorage.setItem('bt-landing-lang', lang); } catch (e) {}
+  });
+  apply(lang);
+
+
+  // ─── Аналитика ───────────────────────────────────────────────────────────
+  // Свои события → наш сервер (поток landing, server/landing.ts): заход, разделы, «Играть», 3D, уход.
+  // anon — тот же случайный id, что у игры (localStorage anonId): связывает лендинг с боями. Без личных данных.
+  // Яндекс Метрика — номер счётчика в YM (0 — выключена); цели: play_click, open_3d, tank_tab.
+  var LP_URL = 'https://blockytanks.duckdns.org/lp';
+  var YM = 113669445;
+  var local = /^(localhost|127\.|192\.168\.|\[::1\])/.test(location.hostname) || location.protocol === 'file:';
+  // Проверка на своём ПК: ?lp=http://localhost:3011 — слать события на локальный сервер
+  var lpTest = new URLSearchParams(location.search).get('lp');
+  if (local && lpTest && /^http:\/\/localhost:\d+$/.test(lpTest)) { LP_URL = lpTest + '/lp'; local = false; }
+  var anon;
+  try {
+    anon = localStorage.getItem('anonId');
+    if (!anon) {
+      anon = (window.crypto && crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + '-' + Math.random().toString(36).slice(2)).slice(0, 36);
+      localStorage.setItem('anonId', anon);
+    }
+  } catch (e) { anon = undefined; }
+  var dev = (matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window) ? 'mobile' : 'desktop';
+  function track(e, extra) {
+    if (local) return;
+    var rec = { e: e, anon: anon, site: location.hostname };
+    for (var k in extra) rec[k] = extra[k];
+    try {
+      var body = JSON.stringify(rec);
+      if (!(navigator.sendBeacon && navigator.sendBeacon(LP_URL, new Blob([body], { type: 'text/plain' })))) {
+        fetch(LP_URL, { method: 'POST', body: body, keepalive: true, mode: 'cors', headers: { 'Content-Type': 'text/plain' } }).catch(function () {});
+      }
+    } catch (err) {}
+  }
+  function goal(id) { try { if (YM && window.ym) ym(YM, 'reachGoal', id); } catch (e) {} }
+  if (YM && !local) {
+    (function (m, e, t, r, i, k, a) { m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments); }; m[i].l = 1 * new Date();
+      k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a); })
+      (window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js?id=' + YM, 'ym');
+    ym(YM, 'init', { ssr: true, clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: true, referrer: document.referrer, url: location.href });
+    var note = document.createElement('div');
+    note.style.cssText = 'margin-top:6px;font-size:12px;opacity:.75';
+    note.textContent = lang === 'en' ? 'This site uses Yandex Metrica to count visits.' : 'Сайт использует Яндекс Метрику для подсчёта посещений.';
+    document.querySelector('footer .wrap').appendChild(note);
+  }
+
+  var refHost = '';
+  try { refHost = document.referrer ? new URL(document.referrer).hostname.replace(/^www\./, '') : ''; } catch (e) {}
+  if (refHost === location.hostname) refHost = '';
+  var utm = new URLSearchParams(location.search).get('utm_source') || undefined;
+  track('view', { ref: refHost || undefined, utm: utm, dev: dev, lang: (navigator.language || '').slice(0, 5), w: innerWidth });
+
+  // Разделы, до которых дочитали (каждый — один раз)
+  var seen = {};
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (list) {
+      list.forEach(function (en) {
+        var id = en.target.id;
+        if (en.isIntersecting && !seen[id]) { seen[id] = 1; track('section', { sec: id }); }
+      });
+    }, { threshold: 0.35 });
+    ['arsenal', 'features', 'modes', 'news', 'faq', 'final'].forEach(function (id) { var el = $(id); if (el) io.observe(el); });
+  }
+  // «Играть»: откуда нажали (шапка, первый экран, арсенал, финал)
+  document.querySelectorAll('a[href="../"]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      var at = a.closest('.top') ? 'header' : a.closest('.hero') ? 'hero' : a.closest('#arsenal') ? 'arsenal' : a.closest('.final') ? 'final' : 'other';
+      track('play', { at: at, t: activeSec() });
+      goal('play_click');
+    });
+  });
+  // Время на странице — только пока вкладка видна; глубина прокрутки — максимум, %
+  var activeMs = 0, shownAt = document.hidden ? 0 : Date.now(), depth = 0, leaves = 0;
+  function activeSec() { return Math.round((activeMs + (shownAt ? Date.now() - shownAt : 0)) / 100) / 10; }
+  addEventListener('scroll', function () {
+    var d = Math.round((scrollY + innerHeight) / document.documentElement.scrollHeight * 100);
+    if (d > depth) depth = Math.min(100, d);
+  }, { passive: true });
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+      if (shownAt) { activeMs += Date.now() - shownAt; shownAt = 0; }
+      track('leave', { t: activeSec(), depth: depth, back: leaves++ > 0 || undefined });
+    } else shownAt = Date.now();
+  });
+
+  // Видео первого экрана: не крутить, если пользователь просит меньше движения или экономит трафик
+  var v = $('hero-video');
+  var save = navigator.connection && navigator.connection.saveData;
+  if (save || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) { v.removeAttribute('autoplay'); v.pause(); v.remove(); }
+})();
+</script>
+</body>
+</html>
