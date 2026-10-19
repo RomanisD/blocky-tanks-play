@@ -12,14 +12,14 @@
 <meta property="og:site_name" content="Blocky Tanks">
 <meta property="og:title" content="Blocky Tanks — танки Второй мировой в браузере">
 <meta property="og:description" content="Заходи и играй за 2 секунды: 28 машин по чертежам, 13 карт сражений, онлайн до 8 игроков. Бесплатно, на ПК и телефоне.">
-<meta property="og:image" content="https://romanisd.github.io/blocky-tanks-play/about/img/og.jpg">
+<meta property="og:image" content="https://romanisd.github.io/blocky-tanks-play/about/img/og.jpg?v=2">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:url" content="https://romanisd.github.io/blocky-tanks-play/about/">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"VideoGame","name":"Blocky Tanks","url":"https://romanisd.github.io/blocky-tanks-play/about/",
- "image":"https://romanisd.github.io/blocky-tanks-play/about/img/og.jpg","genre":["Action","Tank battle","WW2"],
+ "image":"https://romanisd.github.io/blocky-tanks-play/about/img/og.jpg?v=2","genre":["Action","Tank battle","WW2"],
  "gamePlatform":["Web browser","PC","Mobile"],"applicationCategory":"Game","operatingSystem":"Any","inLanguage":["ru","en"],
  "playMode":["SinglePlayer","MultiPlayer"],"offers":{"@type":"Offer","price":"0","priceCurrency":"RUB"},
  "description":"Бесплатные танковые бои Второй мировой в браузере: 28 машин по чертежам, 13 карт реальных сражений, онлайн до 8 игроков."}
@@ -248,6 +248,81 @@ details p { margin: 8px 0 0; color: var(--muted); }
   footer { padding-bottom: 90px; }
 }
 footer { margin-top: 50px; border-top: 1px solid var(--line); padding: 20px 0 30px; color: var(--muted); font-size: 14px; text-align: center; }
+/* ─── v4 (ТЗ владельца 19.10): глубина фона, приборные цифры, «дыхание» кнопки, живой онлайн ─── */
+:root { --mono: ui-monospace, "Cascadia Mono", "JetBrains Mono", "SF Mono", Consolas, "Roboto Mono", monospace; }
+html, body { overflow-x: clip; }
+body { background-image:
+    linear-gradient(rgba(95,224,138,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(95,224,138,.06) 1px, transparent 1px),
+    radial-gradient(ellipse at 50% -10%, #23402c 0%, var(--bg) 60%); }
+/* виньетка: сетка ярче в центре экрана, края темнее */
+body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 75% 70% at 50% 50%, transparent 35%, rgba(4,8,5,.62) 100%); }
+/* подсветка зон: янтарь у первого экрана, зелень у арсенала */
+.hero::after { background:
+  radial-gradient(ellipse 55% 45% at 50% 42%, rgba(255,176,60,.16) 0%, transparent 70%),
+  radial-gradient(ellipse at 50% 45%, rgba(11,20,14,.25) 0%, rgba(11,20,14,.7) 70%),
+  linear-gradient(180deg, rgba(11,20,14,.35) 0%, rgba(11,20,14,.2) 50%, var(--bg) 100%); }
+#arsenal, #voices { position: relative; }
+#arsenal::before, #voices::before { content: ""; position: absolute; z-index: -1; pointer-events: none; left: 50%; top: 0; width: min(140%, 100vw); height: 120%; transform: translateX(-50%);
+  background: radial-gradient(ellipse 50% 45% at 50% 55%, rgba(95,224,138,.11), transparent 70%); }
+#voices::before { background: radial-gradient(ellipse 45% 50% at 50% 50%, rgba(255,190,70,.08), transparent 70%); }
+/* цифры — как на приборной панели */
+.facts b, .stats .v, .b .num, .item time, .live b, .upd b, .score b { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.stats .v { color: #f3f7f0; text-shadow: 0 0 10px rgba(95,224,138,.25); }
+
+/* «Играть»: плавное дыхание свечения + золотой блик при наведении */
+.btn-play { animation: breathe 3.4s ease-in-out infinite; }
+@keyframes breathe {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,213,79,0), 0 6px 22px rgba(255,200,70,.32), inset 0 1px 0 rgba(255,255,255,.55); }
+  50% { box-shadow: 0 0 0 9px rgba(255,213,79,.09), 0 10px 44px rgba(255,190,60,.6), inset 0 1px 0 rgba(255,255,255,.55); } }
+.btn-play::after { animation-duration: 6s; }
+.btn-play::before { content: ""; position: absolute; top: 0; left: -70%; width: 55%; height: 100%; z-index: 0; pointer-events: none;
+  background: linear-gradient(100deg, transparent, rgba(255,246,200,.85), rgba(255,215,90,.35), transparent); transform: skewX(-20deg); transition: left .7s cubic-bezier(.2,.7,.2,1); }
+.btn-play:hover::before { left: 125%; }
+.btn-play:hover { transform: translateY(-2px) scale(1.035); }
+/* под кнопкой: без установки, ПК, телефон */
+.micro { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 14px auto 0; font-size: 13.5px; font-weight: 700; }
+.micro span { padding: 4px 11px; border-radius: 999px; background: rgba(11,20,14,.62); border: 1px solid rgba(255,255,255,.14); backdrop-filter: blur(6px); color: #e3efe5; }
+.micro .pc, .micro .ph { border-color: rgba(95,224,138,.45); }
+/* живой онлайн в плашке */
+.live { color: var(--gold); }
+.live b { color: #fff; }
+
+/* Арсенал: метка класса на превью, цвет полосок по нации */
+.tabs button .th { position: relative; }
+.tabs button .th em { position: absolute; top: 4px; left: 4px; padding: 0 5px; border-radius: 5px; font: 800 10px/1.5 system-ui; font-style: normal; color: var(--gold); background: rgba(11,20,14,.78); }
+.arsenal[data-nat="ussr"] .bar span { background: linear-gradient(90deg, #5d6b2f, #c9a227 55%, #e0503c); }
+.arsenal[data-nat="germany"] .bar span { background: linear-gradient(90deg, #3f5463, #7d97aa 60%, #c3d3df); }
+.arsenal[data-nat="ussr"] { box-shadow: 0 0 40px rgba(95,224,138,.08), inset 0 -60px 120px -80px rgba(229,57,53,.25); }
+.arsenal[data-nat="germany"] { box-shadow: 0 0 40px rgba(95,224,138,.08), inset 0 -60px 120px -80px rgba(120,150,175,.3); }
+/* подсказка «крути»: всегда видна на картинке, рука ходит влево-вправо */
+.stage.pic .rot { opacity: .92; top: auto; bottom: 14px; left: 14px; transform: none; animation: floaty 3s ease-in-out infinite; }
+.rot .hand { display: inline-block; font-size: 17px; animation: swipe 1.8s ease-in-out infinite; }
+@keyframes swipe { 0%, 100% { transform: translateX(-5px) rotate(-8deg); } 50% { transform: translateX(6px) rotate(8deg); } }
+@keyframes floaty { 50% { transform: translateY(-4px); } }
+
+/* Бенто: глубина и золотая рамка при наведении, плашки разрушаемости */
+.b:hover { transform: translateY(-3px) scale(1.01); border-color: rgba(255,213,79,.7); box-shadow: 0 0 0 1px rgba(255,213,79,.3), 0 0 34px rgba(255,213,79,.16), 0 0 60px rgba(95,224,138,.1); }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.pills span { padding: 3px 10px; border-radius: 8px; font-size: 13px; font-weight: 800; color: #1b1b1b; background: linear-gradient(180deg, var(--gold), var(--gold-d)); box-shadow: 0 0 12px rgba(255,213,79,.3); }
+.pills span:nth-child(2) { background: linear-gradient(180deg, #bfe6ff, #7cc4f0); }
+.pills span:nth-child(3) { background: linear-gradient(180deg, #ffb38a, #f27a45); }
+/* телефон: значки покачиваются */
+@keyframes bob { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-11px) rotate(4deg); } }
+
+/* Отзывы игроков */
+.voices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 860px) { .voices { grid-template-columns: 1fr; } }
+.q { margin: 0; padding: 22px 22px 18px; border-radius: var(--radius); background: var(--card); border: 1px solid var(--line); position: relative; display: flex; flex-direction: column; gap: 12px; }
+.q::before { content: "“"; position: absolute; top: -8px; right: 16px; font: 900 72px/1 Georgia, serif; color: rgba(255,213,79,.25); }
+.q p { margin: 0; font-size: 17px; font-weight: 700; font-style: italic; color: #f1f7f2; }
+.q .who { margin-top: auto; font-size: 13.5px; color: var(--muted); }
+.q .fix { display: inline-block; margin-top: 6px; padding: 3px 10px; border-radius: 8px; font-size: 13px; font-weight: 800; color: var(--glow); background: rgba(95,224,138,.1); border: 1px solid rgba(95,224,138,.4); }
+.score { margin-top: 16px; text-align: center; color: var(--muted); font-weight: 700; }
+.score b { color: var(--gold); font-size: 20px; }
+/* «Обновления каждую неделю»: последний патч */
+.upd { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 18px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: rgba(11,20,14,.6); color: var(--glow); font-weight: 700; font-size: 14px; }
+.upd b { color: var(--gold); }
 </style>
 </head>
 <body>
@@ -274,12 +349,13 @@ footer { margin-top: 50px; border-top: 1px solid var(--line); padding: 20px 0 30
     <source src="media/hero.mp4" type="video/mp4">
   </video>
   <div class="wrap">
-    <div class="badge"><span class="dot"></span><span data-i18n="Онлайн-бои открыты · версия 0.16.4|Online battles are live · version 0.16.4">Онлайн-бои открыты · версия 0.16.4</span></div>
+    <div class="badge"><span class="dot"></span><span data-i18n="Онлайн-бои открыты · версия 0.16.5|Online battles are live · version 0.16.5">Онлайн-бои открыты · версия 0.16.5</span><span class="live" id="live" hidden></span></div>
     <h1>BLOCKY <span>TANKS</span></h1>
     <div class="facts"><span><b>28</b> <span data-i18n="машин по чертежам|blueprint tanks">машин по чертежам</span></span><i>•</i><span><b>13</b> <span data-i18n="карт сражений|battle maps">карт сражений</span></span><i>•</i><span><b>8</b> <span data-i18n="игроков онлайн|players online">игроков онлайн</span></span></div>
     <p class="lead" data-i18n="Заходи и играй за 2 секунды.|Jump in and play in 2 seconds.">Заходи и играй за 2 секунды.</p>
     <p class="lead2" data-i18n="Танковые бои Второй мировой на ПК и телефоне. Без скачивания и регистрации.|WW2 tank battles on PC and mobile. No download, no sign-up.">Танковые бои Второй мировой на ПК и телефоне. Без скачивания и регистрации.</p>
     <a class="btn btn-play" href="../">▶ <span data-i18n="Играть|Play now">Играть</span></a>
+    <div class="micro"><span data-i18n="⚡ Без установки и регистрации|⚡ No install, no sign-up">⚡ Без установки и регистрации</span><span class="pc" data-i18n="🖥 ПК|🖥 PC">🖥 ПК</span><span class="ph" data-i18n="📱 Android и iPhone|📱 Android & iPhone">📱 Android и iPhone</span><span data-i18n="🆓 Бесплатно|🆓 Free">🆓 Бесплатно</span></div>
     <div class="also"><span data-i18n="Также на|Also on">Также на</span> <a class="chip" href="https://romaniskz.itch.io/blocky-tanks" rel="noopener"><svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.13 1.338C2.08 1.96.02 4.328 0 4.95v1.03c0 1.303 1.22 2.45 2.325 2.45 1.33 0 2.436-1.102 2.436-2.41 0 1.308 1.07 2.41 2.4 2.41 1.328 0 2.362-1.102 2.362-2.41 0 1.308 1.137 2.41 2.466 2.41h.024c1.33 0 2.466-1.102 2.466-2.41 0 1.308 1.034 2.41 2.363 2.41 1.33 0 2.4-1.102 2.4-2.41 0 1.308 1.106 2.41 2.435 2.41C22.78 8.43 24 7.282 24 5.98V4.95c-.02-.62-2.082-2.99-3.13-3.612-3.253-.114-5.508-.134-8.87-.133-3.362 0-7.945.053-8.87.133zm6.376 6.477a2.74 2.74 0 0 1-.468.602c-.5.49-1.19.795-1.947.795a2.786 2.786 0 0 1-1.95-.795c-.182-.178-.32-.37-.446-.59-.127.222-.303.412-.486.59a2.788 2.788 0 0 1-1.95.795c-.092 0-.187-.025-.264-.052-.107 1.113-.152 2.176-.168 2.95v.005l-.006 1.167c.02 2.334-.23 7.564 1.03 8.85 1.952.454 5.545.662 9.15.663 3.605 0 7.198-.21 9.15-.664 1.26-1.284 1.01-6.514 1.03-8.848l-.006-1.167v-.004c-.016-.775-.06-1.838-.168-2.95-.077.026-.172.052-.263.052a2.788 2.788 0 0 1-1.95-.795c-.184-.178-.36-.368-.486-.59-.127.22-.265.412-.447.59a2.786 2.786 0 0 1-1.95.794c-.76 0-1.446-.303-1.948-.793a2.74 2.74 0 0 1-.468-.602 2.738 2.738 0 0 1-.463.602 2.787 2.787 0 0 1-1.95.794h-.16a2.787 2.787 0 0 1-1.95-.793 2.738 2.738 0 0 1-.464-.602zm-2.004 2.59v.002c.795.002 1.5 0 2.373.953.687-.072 1.406-.108 2.125-.107.72 0 1.438.035 2.125.107.873-.953 1.578-.95 2.372-.953.376 0 1.876 0 2.92 2.934l1.123 4.028c.832 2.995-.266 3.068-1.636 3.07-2.03-.075-3.156-1.55-3.156-3.025-1.124.184-2.436.276-3.748.277-1.312 0-2.624-.093-3.748-.277 0 1.475-1.125 2.95-3.156 3.026-1.37-.004-2.468-.077-1.636-3.072l1.122-4.027c1.045-2.934 2.545-2.934 2.92-2.934zM12 12.714c-.002.002-2.14 1.964-2.523 2.662l1.4-.056v1.22c0 .056.56.033 1.123.007.562.026 1.124.05 1.124-.008v-1.22l1.4.055C14.138 14.677 12 12.713 12 12.713z"/></svg> itch.io</a> <a class="chip" href="https://pixelpicked.com/game/40fNZ5ObAEM/blocky-tanks" rel="noopener">🎲 PixelPicked</a></div>
 </div>
   </div>
@@ -294,7 +370,7 @@ footer { margin-top: 50px; border-top: 1px solid var(--line); padding: 20px 0 30
       <div class="stage" id="stage">
         <div class="tags"><span class="tag" id="t-nat"></span><span class="tag cls" id="t-cls"></span><span class="tag era" id="t-era"></span></div>
         <img id="t-img" src="img/tank-t34_85.webp" alt="" width="720" height="405">
-        <div class="rot" id="rot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 4 0 0 0 18 0"/><path d="M21 12a9 4 0 0 0-14-3.3"/><path d="M7 5.5 6.5 8.8 9.8 9.4"/></svg>360°</div>
+        <div class="rot" id="rot" aria-hidden="true"><span class="hand">👆</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 4 0 0 0 18 0"/><path d="M21 12a9 4 0 0 0-14-3.3"/><path d="M7 5.5 6.5 8.8 9.8 9.4"/></svg>360°</div>
         <button class="btn3d" id="btn3d" type="button">🔄 <span data-i18n="Покрутить в 3D|Spin in 3D">Покрутить в 3D</span></button>
         <div class="hint3d" id="hint3d" data-i18n="Тяните влево-вправо|Drag left or right">Тяните влево-вправо</div>
       </div>
@@ -320,7 +396,7 @@ footer { margin-top: 50px; border-top: 1px solid var(--line); padding: 20px 0 30
       <article class="b w2"><img src="img/armor.webp" alt="Схема брони Т-34-85 и Пантеры" loading="lazy" width="820" height="335" style="object-position:50% 30%">
         <div class="txt"><h3 data-i18n="Броня и снаряды|Armor and shells">Броня и снаряды</h3><p data-i18n="Настоящие толщины листов. ББ, БП и ОФ, наклон, рикошеты.|Real plate thickness. AP, APCR and HE, slope, ricochets.">Настоящие толщины листов. ББ, БП и ОФ, наклон, рикошеты.</p></div></article>
       <article class="b w3"><img src="img/maps.webp" alt="Карта сверху" loading="lazy" width="800" height="560">
-        <div class="txt"><h3 data-i18n="13 карт сражений|13 battle maps">13 карт сражений</h3><p data-i18n="Прохоровка, Сталинград, Ладожский лёд, Зееловские высоты… Погода, артобстрел, тонкий лёд, мосты. Стены рушатся от фугасов, заборы — от тарана.|Prokhorovka, Stalingrad, Lake Ladoga ice, Seelow Heights… Weather, artillery, thin ice, bridges. HE shells bring walls down, tanks ram through fences.">Прохоровка, Сталинград, Ладожский лёд, Зееловские высоты… Погода, артобстрел, тонкий лёд, мосты. Стены рушатся от фугасов, заборы — от тарана.</p></div></article>
+        <div class="txt"><h3 data-i18n="13 карт сражений|13 battle maps">13 карт сражений</h3><p data-i18n="Прохоровка, Сталинград, Ладожский лёд, Зееловские высоты… Погода, ночь, артобстрел.|Prokhorovka, Stalingrad, Lake Ladoga ice, Seelow Heights… Weather, night, artillery barrages.">Прохоровка, Сталинград, Ладожский лёд, Зееловские высоты… Погода, ночь, артобстрел.</p><div class="pills"><span data-i18n="💥 Стены рушатся от фугасов|💥 HE brings walls down">💥 Стены рушатся от фугасов</span><span data-i18n="🧊 Лёд проламывается|🧊 Ice breaks under you">🧊 Лёд проламывается</span><span data-i18n="🌉 Мост можно взорвать|🌉 Bridges can be blown up">🌉 Мост можно взорвать</span></div></div></article>
       <article class="b w3"><img src="img/quick.webp" alt="Колесо быстрых команд" loading="lazy" width="800" height="450">
         <div class="txt"><h3 data-i18n="Быстрые команды|Quick commands">Быстрые команды</h3><p data-i18n="«Атакую!», «Нужна помощь», метка «Сюда!» — в одно движение. Фразы переводятся на язык каждого игрока.|“Attacking!”, “Need help”, a “Here!” marker — in one move. Phrases are translated for every player.">«Атакую!», «Нужна помощь», метка «Сюда!» — в одно движение. Фразы переводятся на язык каждого игрока.</p></div></article>
     </div>
@@ -365,9 +441,10 @@ footer { margin-top: 50px; border-top: 1px solid var(--line); padding: 20px 0 30
   <section id="news">
     <div class="kicker" data-i18n="Новости|News">Новости</div>
     <h2 data-i18n="Обновления каждую неделю|Updates every week">Обновления каждую неделю</h2>
+    <div class="upd"><span class="dot"></span><span data-i18n="Последний патч|Latest patch">Последний патч</span> <b>0.16.5</b> — <span id="upd-ago"></span></div>
     <p class="sub"><span data-i18n="Все новости — в|All news in">Все новости — в</span> <a href="https://t.me/blockytanks" rel="noopener">Telegram</a> <span data-i18n="и|and">и</span> <a href="https://vk.ru/blockytanks" rel="noopener">VK</a>.</p>
     <div class="news">
-      <div class="item"><time datetime="2026-10-19">19.10.2026</time><div><h3 data-i18n="0.16.4 — по вашим отзывам и новое меню|0.16.4 — Your feedback and a new menu">0.16.4 — по вашим отзывам и новое меню</h3><p data-i18n="Прицел больше не сбивается при повороте корпуса — башня сама докручивается. Трассер летит из ствола. Новое главное меню, кнопка 💬 на телефоне перенесена под лупу, чтобы не мешала стрелять.|The aim no longer drifts when the hull turns — the turret follows on its own. Tracers start from the muzzle. A new main menu, and the 💬 button on mobile moved under the zoom button so it won’t get in the way of firing.">Прицел больше не сбивается при повороте корпуса — башня сама докручивается. Трассер летит из ствола. Новое главное меню, кнопка 💬 на телефоне перенесена под лупу, чтобы не мешала стрелять.</p></div></div>
+      <div class="item"><time datetime="2026-10-19">19.10.2026</time><div><h3 data-i18n="0.16.4–0.16.5 — по вашим отзывам и новое меню|0.16.4–0.16.5 — Your feedback and a new menu">0.16.4–0.16.5 — по вашим отзывам и новое меню</h3><p data-i18n="Прицел больше не сбивается при повороте корпуса — башня сама докручивается. Трассер летит из ствола. Камера смотрит вверх-вниз шире, чем ходит ствол. Новое главное меню, кнопка 💬 на телефоне перенесена под лупу, чтобы не мешала стрелять.|The aim no longer drifts when the hull turns — the turret follows on its own. Tracers start from the muzzle. The camera now looks up and down further than the gun elevates. A new main menu, and the 💬 button on mobile moved under the zoom button so it won’t get in the way of firing.">Прицел больше не сбивается при повороте корпуса — башня сама докручивается. Трассер летит из ствола. Новое главное меню, кнопка 💬 на телефоне перенесена под лупу, чтобы не мешала стрелять.</p></div></div>
       <div class="item"><time datetime="2026-10-19">19.10.2026</time><div><h3 data-i18n="0.16 — быстрые команды|0.16 — Quick commands">0.16 — быстрые команды</h3><p data-i18n="Колесо фраз союзникам (C на ПК, 💬 на телефоне) и метка «Сюда!» на карте.|A phrase wheel for allies (C on PC, 💬 on mobile) and a “Here!” map marker.">Колесо фраз союзникам (C на ПК, 💬 на телефоне) и метка «Сюда!» на карте.</p></div></div>
       <div class="item"><time datetime="2026-10-18">18.10.2026</time><div><h3 data-i18n="0.15 — онлайн-бои|0.15 — Online battles">0.15 — онлайн-бои</h3><p data-i18n="Мультиплеер до 8 игроков, случайные карты, новые комнаты открываются сами.|Multiplayer for up to 8 players, random maps, new rooms open automatically.">Мультиплеер до 8 игроков, случайные карты, новые комнаты открываются сами.</p></div></div>
     </div>
@@ -380,6 +457,18 @@ footer { margin-top: 50px; border-top: 1px solid var(--line); padding: 20px 0 30
     <details><summary data-i18n="На чём можно играть?|What can I play on?">На чём можно играть?</summary><p data-i18n="На компьютере (Chrome, Edge, Firefox, Яндекс Браузер) и на телефоне — Android и iPhone, прямо в браузере.|On PC (Chrome, Edge, Firefox) and on phones — Android and iPhone, right in the browser.">На компьютере (Chrome, Edge, Firefox, Яндекс Браузер) и на телефоне — Android и iPhone, прямо в браузере.</p></details>
     <details><summary data-i18n="Как играть с друзьями?|How do I play with friends?">Как играть с друзьями?</summary><p data-i18n="Нажмите «Мультиплеер» в меню. Если зайти одновременно, вы попадёте в одну комнату. Общие сборы объявляем в Telegram.|Press “Multiplayer” in the menu. Join at the same time to land in the same room. Group battles are announced in Telegram.">Нажмите «Мультиплеер» в меню. Если зайти одновременно, вы попадёте в одну комнату. Общие сборы объявляем в Telegram.</p></details>
     <details><summary data-i18n="Нашёл ошибку или есть идея — куда писать?|Found a bug or have an idea?">Нашёл ошибку или есть идея — куда писать?</summary><p data-i18n="Кнопка «Отзыв» в меню игры или комментарии в Telegram и VK. Читаем всё.|Use the “Feedback” button in the game menu, or comment in Telegram and VK. We read everything.">Кнопка «Отзыв» в меню игры или комментарии в Telegram и VK. Читаем всё.</p></details>
+  </section>
+
+  <section id="voices">
+    <div class="kicker" data-i18n="Отзывы игроков|Player feedback">Отзывы игроков</div>
+    <h2 data-i18n="Делаем вместе с игроками|Built together with players">Делаем вместе с игроками</h2>
+    <p class="sub" data-i18n="Кнопка «Отзыв» есть прямо в игре — каждое сообщение читает разработчик.|There’s a Feedback button right in the game — the developer reads every message.">Кнопка «Отзыв» есть прямо в игре — каждое сообщение читает разработчик.</p>
+    <div class="voices">
+      <blockquote class="q"><p data-i18n="«Классная идея, ещё бы моделей танков и побольше карт»|“Great idea — just add more tank models and more maps”">«Классная идея, ещё бы моделей танков и побольше карт»</p><div class="who"><span data-i18n="Игрок с ПК, 10 октября|PC player, Oct 10">Игрок с ПК, 10 октября</span><br><span class="fix" data-i18n="✔ Сейчас 28 машин и 13 карт|✔ Now 28 vehicles and 13 maps">✔ Сейчас 28 машин и 13 карт</span></div></blockquote>
+      <blockquote class="q"><p data-i18n="«Прицел неудобный, сбивается при повороте корпусом… а так нормально»|“The aim drifts when I turn the hull… otherwise it’s good”">«Прицел неудобный, сбивается при повороте корпусом… а так нормально»</p><div class="who"><span data-i18n="Игрок с ПК, 14 октября|PC player, Oct 14">Игрок с ПК, 14 октября</span><br><span class="fix" data-i18n="✔ Исправлено в 0.16.4|✔ Fixed in 0.16.4">✔ Исправлено в 0.16.4</span></div></blockquote>
+      <blockquote class="q"><p data-i18n="«👍 Управление понятно»|“👍 The controls are clear”">«👍 Управление понятно»</p><div class="who"><span data-i18n="Игрок с Android, 14 октября|Android player, Oct 14">Игрок с Android, 14 октября</span><br><span class="fix" data-i18n="✔ Джойстик и кнопки под палец|✔ Joystick and thumb buttons">✔ Джойстик и кнопки под палец</span></div></blockquote>
+    </div>
+    <p class="score"><b>14</b> <span data-i18n="отметок «👍 карта понравилась» в игре|“👍 I liked the map” votes in the game">отметок «👍 карта понравилась» в игре</span></p>
   </section>
 
   <div class="final" id="final">
@@ -439,7 +528,7 @@ footer { margin-top: 50px; border-top: 1px solid var(--line); padding: 20px 0 30
   TANKS.forEach(function (t, i) {
     var b = document.createElement('button');
     b.type = 'button'; b.setAttribute('role', 'tab');
-    b.innerHTML = '<span class="th" style="background-image:url(img/tank-' + t.id + '.webp)"></span><span class="n ' + t.nat + '"></span><span class="l"></span>';
+    b.innerHTML = '<span class="th" style="background-image:url(img/tank-' + t.id + '.webp)"><em></em></span><span class="n ' + t.nat + '"></span><span class="l"></span>';
     b.addEventListener('click', function () { show(i); track('tab', { tank: t.id }); goal('tank_tab'); });
     tabs.appendChild(b);
   });
@@ -447,8 +536,9 @@ footer { margin-top: 50px; border-top: 1px solid var(--line); padding: 20px 0 30
   function show(i) {
     cur = i;
     var t = TANKS[i], en = lang === 'en';
-    [].forEach.call(tabs.children, function (b, k) { b.querySelector('.l').textContent = en ? TANKS[k].tabEn : TANKS[k].tabRu; b.setAttribute('aria-selected', k === i); });
+    [].forEach.call(tabs.children, function (b, k) { b.querySelector('.l').textContent = en ? TANKS[k].tabEn : TANKS[k].tabRu; b.querySelector('em').textContent = en ? { 'СТ': 'MT', 'ТТ': 'HT', 'ПТ-САУ': 'TD' }[TANKS[k].cls[0]] : TANKS[k].cls[0]; b.setAttribute('aria-selected', k === i); });
     $('t-name').textContent = en ? t.en : t.ru;
+    stage.parentElement.setAttribute('data-nat', t.nat);
     $('t-full').textContent = en ? t.fullEn : t.fullRu;
     $('t-desc').textContent = en ? t.dEn : t.dRu;
     var nat = $('t-nat'); nat.className = 'tag ' + t.nat; nat.textContent = t.nat === 'ussr' ? (en ? 'USSR' : 'СССР') : (en ? 'Germany' : 'Германия');
@@ -492,6 +582,22 @@ footer { margin-top: 50px; border-top: 1px solid var(--line); padding: 20px 0 30
   stage.classList.add('pic');
   img.addEventListener('click', function () { if (!in3d) open3d(); });
 
+  // «Последний патч — сегодня / 3 дня назад»: дата — из первой новости
+  function renderAgo() {
+    var t = document.querySelector('.news time'), el = $('upd-ago'); if (!t || !el) return;
+    var n = Math.max(0, Math.floor((Date.now() - new Date(t.getAttribute('datetime') + 'T12:00:00+03:00')) / 864e5));
+    var en = lang === 'en', m10 = n % 10, m100 = n % 100;
+    el.textContent = n === 0 ? (en ? 'today' : 'сегодня') : n === 1 ? (en ? 'yesterday' : 'вчера') :
+      en ? n + ' days ago' : n + ' ' + (m10 === 1 && m100 !== 11 ? 'день' : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? 'дня' : 'дней') + ' назад';
+  }
+  // Живой онлайн: настоящее число игроков в комнатах (GET /online на сервере игры); ноль — не показываем
+  var online = 0;
+  function renderLive() {
+    var el = $('live'); if (!el) return;
+    el.hidden = !(online > 0);
+    if (online > 0) el.innerHTML = ' · ⚡ ' + (lang === 'en' ? 'in battle now: <b>' + online + '</b>' : 'сейчас в боях: <b>' + online + '</b>');
+  }
+
   // Язык: ?lang=en / ?lang=ru, иначе по языку браузера; выбор запоминается
   var q = new URLSearchParams(location.search).get('lang'), saved = null;
   try { saved = localStorage.getItem('bt-landing-lang'); } catch (e) {}
@@ -506,6 +612,7 @@ footer { margin-top: 50px; border-top: 1px solid var(--line); padding: 20px 0 30
     document.title = l === 'en' ? 'Blocky Tanks — free WW2 tank battles in your browser' : 'Blocky Tanks — танковые бои Второй мировой в браузере, бесплатно';
     if (in3d) $('btn3d').querySelector('span').textContent = l === 'en' ? 'Picture' : 'Картинка';
     show(cur);
+    renderAgo(); renderLive();
   }
   btn.addEventListener('click', function () {
     apply(lang === 'en' ? 'ru' : 'en');
@@ -533,6 +640,12 @@ footer { margin-top: 50px; border-top: 1px solid var(--line); padding: 20px 0 30
       localStorage.setItem('anonId', anon);
     }
   } catch (e) { anon = undefined; }
+  function pollOnline() {
+    if (local || document.hidden) return;
+    fetch(LP_URL.replace(/\/lp$/, '/online'), { mode: 'cors', cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { if (j && typeof j.players === 'number') { online = j.players; renderLive(); } }).catch(function () {});
+  }
+  pollOnline(); setInterval(pollOnline, 60000);
   var dev = (matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window) ? 'mobile' : 'desktop';
   function track(e, extra) {
     if (local) return;
@@ -572,7 +685,7 @@ footer { margin-top: 50px; border-top: 1px solid var(--line); padding: 20px 0 30
         if (en.isIntersecting && !seen[id]) { seen[id] = 1; track('section', { sec: id }); }
       });
     }, { threshold: 0.35 });
-    ['arsenal', 'features', 'modes', 'news', 'faq', 'final'].forEach(function (id) { var el = $(id); if (el) io.observe(el); });
+    ['arsenal', 'features', 'modes', 'news', 'faq', 'voices', 'final'].forEach(function (id) { var el = $(id); if (el) io.observe(el); });
   }
   // «Играть»: откуда нажали (шапка, первый экран, арсенал, финал)
   document.querySelectorAll('a[href="../"]').forEach(function (a) {
@@ -601,7 +714,7 @@ footer { margin-top: 50px; border-top: 1px solid var(--line); padding: 20px 0 30
   var calm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!calm && 'IntersectionObserver' in window) {
     document.documentElement.classList.add('anim');
-    var targets = document.querySelectorAll('main h2, main .sub, .kicker, .arsenal, .b, .mode, .phone, .wide, .item, details, .final');
+    var targets = document.querySelectorAll('main h2, main .sub, .kicker, .arsenal, .b, .mode, .phone, .wide, .item, details, .q, .final');
     var ro = new IntersectionObserver(function (list) {
       list.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); ro.unobserve(en.target); } });
     }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
@@ -609,7 +722,7 @@ footer { margin-top: 50px; border-top: 1px solid var(--line); padding: 20px 0 30
       el.classList.add('reveal');
       // соседние карточки — по очереди
       var sib = el.parentElement ? [].indexOf.call(el.parentElement.children, el) : 0;
-      if (/(^| )(b|mode|item)( |$)/.test(el.className)) el.style.transitionDelay = Math.min(sib, 5) * 90 + 'ms';
+      if (/(^| )(b|mode|item|q)( |$)/.test(el.className)) el.style.transitionDelay = Math.min(sib, 5) * 90 + 'ms';
       ro.observe(el);
     });
     // Счётчики 28 / 13 / 8 и «2 сек»
@@ -623,7 +736,7 @@ footer { margin-top: 50px; border-top: 1px solid var(--line); padding: 20px 0 30
     var co = new IntersectionObserver(function (list) {
       list.forEach(function (en) { if (en.isIntersecting) { count(en.target); co.unobserve(en.target); } });
     }, { threshold: 0.6 });
-    [].forEach.call(document.querySelectorAll('.facts b, .b .num'), function (el) { co.observe(el); });
+    [].forEach.call(document.querySelectorAll('.facts b, .b .num, .score b'), function (el) { co.observe(el); });
     // Параллакс строя танков
     var wide = document.querySelector('.wide img'), ticking = false;
     if (wide) addEventListener('scroll', function () {
