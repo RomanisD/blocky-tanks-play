@@ -115,11 +115,11 @@ h2 { margin: 6px 0 8px; font-size: clamp(28px, 4.4vw, 42px); line-height: 1.1; f
   background-size: 24px 24px; }
 .stage .bp img { position: absolute; inset: 4% 3% 14%; width: 94%; height: 82%; object-fit: contain; transition: opacity .3s; }
 .stage.bpon .bp { display: block; }
-.stage.bpon .rot { display: none; }
+.stage.bpon .rot, .stage.bpon .tags { display: none; }
 .sbtn { position: absolute; right: 14px; bottom: 14px; z-index: 2; display: flex; gap: 10px; align-items: center; }
 .sbtn > .btn3d { position: static; }
-@media (max-width: 480px) { .btnbp span { display: none; } .btnbp { position: absolute; top: 14px; right: 14px; padding: 8px 11px; } .sbtn { position: static; } .sbtn > .btn3d { position: absolute; } }
-.btnbp { display: inline-flex; gap: 8px; align-items: center; padding: 9px 16px; border-radius: 12px; cursor: pointer;
+@media (max-width: 480px) { .btnbp span { display: none; } .btnbp { padding: 9px 12px; } .stage .bp img { inset: 3% 3% 24%; height: 73%; } }
+.btnbp { position: absolute; left: 14px; bottom: 14px; z-index: 2; display: inline-flex; gap: 8px; align-items: center; padding: 9px 16px; border-radius: 12px; cursor: pointer;
   background: rgba(11,20,14,.72); color: var(--ink); border: 1px solid var(--line); font: 800 14px system-ui; backdrop-filter: blur(6px); }
 .btnbp:hover, .stage.bpon .btnbp { border-color: var(--glow); background: rgba(30,60,40,.9); }
 .rot { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); z-index: 2; display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; pointer-events: none;
@@ -128,10 +128,10 @@ h2 { margin: 6px 0 8px; font-size: clamp(28px, 4.4vw, 42px); line-height: 1.1; f
 @keyframes spin { to { transform: rotate(360deg); } }
 .stage.pic { cursor: pointer; }
 .stage.pic:hover .rot { opacity: 1; }
-@media (hover: none) { .stage.pic .rot { opacity: .9; top: auto; bottom: 14px; left: 14px; transform: none; } }
+@media (hover: none) { .stage.pic .rot { opacity: .9; top: auto; bottom: 64px; left: 14px; transform: none; } }
 .btn3d { animation: glow3d 2.6s ease-in-out infinite; }
 @keyframes glow3d { 50% { box-shadow: 0 0 26px rgba(95,224,138,.55); } }
-.hint3d { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 2; font-size: 13px; color: #d6e8d9; background: rgba(11,20,14,.6); padding: 4px 10px; border-radius: 8px; pointer-events: none; display: none; }
+.hint3d { position: absolute; left: 50%; bottom: 64px; transform: translateX(-50%); z-index: 2; font-size: 13px; color: #d6e8d9; background: rgba(11,20,14,.6); padding: 4px 10px; border-radius: 8px; pointer-events: none; display: none; }
 .info { padding: 26px 26px 24px; display: flex; flex-direction: column; min-width: 0; }
 .info h3 { margin: 0; font-size: 30px; color: var(--gold); line-height: 1.1; }
 .info .full { margin: 4px 0 12px; color: var(--muted); font-size: 14px; }
@@ -309,7 +309,7 @@ body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-even
 .arsenal[data-nat="ussr"] { box-shadow: 0 0 40px rgba(95,224,138,.08), inset 0 -60px 120px -80px rgba(229,57,53,.25); }
 .arsenal[data-nat="germany"] { box-shadow: 0 0 40px rgba(95,224,138,.08), inset 0 -60px 120px -80px rgba(120,150,175,.3); }
 /* подсказка «крути»: всегда видна на картинке, рука ходит влево-вправо */
-.stage.pic .rot { opacity: .92; top: auto; bottom: 14px; left: 14px; transform: none; animation: floaty 3s ease-in-out infinite; }
+.stage.pic .rot { opacity: .92; top: auto; bottom: 64px; left: 14px; transform: none; animation: floaty 3s ease-in-out infinite; }
 .rot .hand { display: inline-block; font-size: 17px; animation: swipe 1.8s ease-in-out infinite; }
 @keyframes swipe { 0%, 100% { transform: translateX(-5px) rotate(-8deg); } 50% { transform: translateX(6px) rotate(8deg); } }
 @keyframes floaty { 50% { transform: translateY(-4px); } }
@@ -384,8 +384,8 @@ body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-even
         <img id="t-img" src="img/tank-t34_85.webp" alt="" width="720" height="405">
         <div class="rot" id="rot" aria-hidden="true"><span class="hand">👆</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 4 0 0 0 18 0"/><path d="M21 12a9 4 0 0 0-14-3.3"/><path d="M7 5.5 6.5 8.8 9.8 9.4"/></svg>360°</div>
         <div class="bp" id="t-bp"><img alt="" id="t-bpimg" decoding="async"></div>
-        <div class="sbtn"><button class="btnbp" id="btnbp" type="button" aria-label="Чертёж">📐 <span data-i18n="Чертёж|Blueprint">Чертёж</span></button>
-        <button class="btn3d" id="btn3d" type="button">🔄 <span data-i18n="Покрутить в 3D|Spin in 3D">Покрутить в 3D</span></button></div>
+        <button class="btnbp" id="btnbp" type="button" aria-label="Чертёж">📐 <span data-i18n="Чертёж|Blueprint">Чертёж</span></button>
+        <div class="sbtn"><button class="btn3d" id="btn3d" type="button">🔄 <span data-i18n="Покрутить в 3D|Spin in 3D">Покрутить в 3D</span></button></div>
         <div class="hint3d" id="hint3d" data-i18n="Тяните влево-вправо|Drag left or right">Тяните влево-вправо</div>
       </div>
       <div class="info">
@@ -576,15 +576,18 @@ body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-even
   // 3D: сама игра в режиме витрины (?preview=showcase) — грузится только по нажатию
   // Чертёж: лист из нашей модели, RU/EN; грузится только по нажатию
   var bpOn = false;
-  function setBp() { $('t-bpimg').src = 'img/bp/' + TANKS[cur].id + (lang === 'en' ? '-en' : '') + '.webp'; $('t-bpimg').alt = (lang === 'en' ? 'Blueprint: ' + TANKS[cur].en : 'Чертёж: ' + TANKS[cur].ru); }
+  function bpLabel() { $('btnbp').querySelector('span').textContent = bpOn ? (lang === 'en' ? 'Picture' : 'Картинка') : (lang === 'en' ? 'Blueprint' : 'Чертёж'); }
+  function setBp() { bpLabel(); $('t-bpimg').src = 'img/bp/' + TANKS[cur].id + (lang === 'en' ? '-en' : '') + '.webp'; $('t-bpimg').alt = (lang === 'en' ? 'Blueprint: ' + TANKS[cur].en : 'Чертёж: ' + TANKS[cur].ru); }
   $('btnbp').addEventListener('click', function (e) {
     e.stopPropagation();
     if (in3d) close3d();
+    $('hint3d').style.display = 'none';
     bpOn = !bpOn; stage.classList.toggle('bpon', bpOn);
     if (bpOn) { setBp(); if (typeof track === 'function') track('blueprint', { tank: TANKS[cur].id }); }
+    bpLabel();
   });
   function open3d() {
-    if (bpOn) { bpOn = false; stage.classList.remove('bpon'); }
+    if (bpOn) { bpOn = false; stage.classList.remove('bpon'); bpLabel(); }
     in3d = true;
     if (typeof track === 'function') { track('open3d', { tank: TANKS[cur].id }); goal('open_3d'); }
     var f = stage.querySelector('iframe');
