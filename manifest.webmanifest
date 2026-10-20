@@ -1,0 +1,19 @@
+{
+  "name": "Blocky Tanks — танковые бои Второй мировой",
+  "short_name": "Blocky Tanks",
+  "description": "Бесплатные танковые бои Второй мировой: 28 машин по чертежам, 13 карт, онлайн до 8 игроков.",
+  "id": "./",
+  "start_url": "./?src=app",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#0b140e",
+  "theme_color": "#0b140e",
+  "lang": "ru",
+  "categories": ["games"],
+  "icons": [
+    { "src": "app/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "app/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "app/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

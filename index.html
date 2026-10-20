@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="app/icon-192.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <meta name="theme-color" content="#8fd3ff" />
   <title>Blocky Tanks</title>
@@ -607,7 +609,7 @@
       body.touch .kill-feed { top: calc(max(10px, env(safe-area-inset-top)) + 104px); right: auto; left: 50%; transform: translateX(-50%); align-items: center; }
     }
   </style>
-  <script type="module" crossorigin src="./assets/index-CUelBuNQ.js"></script>
+  <script type="module" crossorigin src="./assets/index-DK_qKInM.js"></script>
 </head>
   <body>
   <canvas id="game"></canvas>
@@ -920,8 +922,12 @@
       background-image:
         linear-gradient(rgba(95,224,138,.05) 1px, transparent 1px),
         linear-gradient(90deg, rgba(95,224,138,.05) 1px, transparent 1px),
+        url(menu/bp-tiger2.webp),
         radial-gradient(ellipse at 50% -10%, #24432d 0%, #0b140e 65%);
-      background-size: 36px 36px, 36px 36px, 100% 100%;
+      /* лист чертежа Королевского тигра из нашей модели (tools/blender/blueprint*.py) — бледно за карточками */
+      background-size: 36px 36px, 36px 36px, auto 112%, 100% 100%;
+      background-position: 0 0, 0 0, 60% 40%, center;
+      background-repeat: repeat, repeat, no-repeat, no-repeat;
     }
     .menu-title { color: #ffd54f; text-shadow: 0 3px 10px rgba(0,0,0,.6), 0 0 26px rgba(255,213,79,.35); }
     .name-input { background: rgba(20,40,28,.7); border: 1px solid rgba(110,230,140,.35); border-radius: 12px; box-shadow: inset 0 0 12px rgba(0,0,0,.35); }
@@ -970,6 +976,6 @@
     @media (max-width: 639px) { .mode-art { aspect-ratio: 16 / 5.5; } .mode-btn .mode-icon { width: 44px; height: 44px; font-size: 1.4rem; margin-top: -1.8rem; } }
     @media (max-height: 500px) and (min-width: 700px) { .mode-buttons { grid-template-columns: repeat(3, 1fr); max-width: 980px; } #btn-multi { grid-column: auto; } #btn-multi .mode-art { aspect-ratio: 16 / 6; } .mode-btn .mode-desc { font-size: 12px; } .profile-btn { width: min(980px, 100%); } }
     @media (max-height: 500px) { .mode-art { aspect-ratio: 16 / 5; } .round-row .menu-btn i { width: 48px; height: 48px; font-size: 20px; } }
-  </style>
+  </style>
 </body>
 </html>
