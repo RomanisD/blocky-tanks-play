@@ -276,6 +276,12 @@
       display: flex; align-items: center; justify-content: center;
     }
     .hp-fill { position: absolute; left: 0; top: 0; height: 100%; width: 100%; background: #66bb6a; transition: width .2s, background .2s; z-index: 1; }
+    /* Вертикальный телефон (0.17.1, отзыв 22.10): прицел висит над своим танком — HP и перезарядка закрывали башню.
+       Переносим их наверх, под счёт боя */
+    @media (orientation: portrait) and (max-width: 700px) {
+      .hp-bar { top: 52px; width: 110px; height: 18px; margin-left: -55px; }
+      .reload { top: 42px; }
+    }
     .hp-text { position: relative; z-index: 2; font-size: 12px; font-weight: 800; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.9); pointer-events: none; white-space: nowrap; }
     .banner {
       position: absolute; left: 50%; top: 22%; transform: translateX(-50%); text-align: center;
@@ -325,8 +331,13 @@
     }
     /* Выбор танка на следующую жизнь */
     .death-pick-title { font-size: clamp(13px, 3vmin, 17px); opacity: .85; margin-top: .5rem; }
+    .death-groups { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; width: min(92vw, 640px); pointer-events: auto; }
+    .death-group { font: inherit; font-size: clamp(12px, 2.6vmin, 15px); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,.35); background: rgba(0,0,0,.45); color: #fff; cursor: pointer; }
+    .death-group.selected { background: #c62828; border-color: #ef5350; }
     .death-pick { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; width: min(92vw, 640px); pointer-events: auto; }
     @media (max-width: 600px) { .death-pick { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    /* Вкладки наций (0.17.1): в группе до 10 машин — список прокручивается, не уходит за край экрана */
+    .death-pick { max-height: 58vh; overflow-y: auto; overscroll-behavior: contain; padding: 2px; }
     .pick-card {
       display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 6px; cursor: pointer;
       background: rgba(255,255,255,.06); border: 2px solid rgba(255,213,79,.3); border-radius: 12px; color: #fff;
@@ -372,7 +383,7 @@
     .results-title { font-size: clamp(24px, 6vmin, 42px); font-weight: 900; color: #ffd54f; }
     .results-sub { font-size: 15px; opacity: .9; }
     /* Кампания (Ф4): без возрождения — на экране гибели нет выбора танка */
-    .death-screen.final .death-pick, .death-screen.final .death-pick-title { display: none; }
+    .death-screen.final .death-pick, .death-screen.final .death-pick-title, .death-screen.final .death-groups { display: none; }
     /* Кампания (Ф4): глава, экипаж, бои, письмо */
     .campaign { display: flex; flex-direction: column; gap: 10px; width: min(640px, 94vw); }
     .camp-head { display: flex; align-items: baseline; gap: 10px; }
@@ -609,7 +620,7 @@
       body.touch .kill-feed { top: calc(max(10px, env(safe-area-inset-top)) + 104px); right: auto; left: 50%; transform: translateX(-50%); align-items: center; }
     }
   </style>
-  <script type="module" crossorigin src="./assets/index-DnIM0On0.js"></script>
+  <script type="module" crossorigin src="./assets/index-CUTLhPTp.js"></script>
 </head>
   <body>
   <canvas id="game"></canvas>
