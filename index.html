@@ -620,7 +620,7 @@
       body.touch .kill-feed { top: calc(max(10px, env(safe-area-inset-top)) + 104px); right: auto; left: 50%; transform: translateX(-50%); align-items: center; }
     }
   </style>
-  <script type="module" crossorigin src="./assets/index-Mumk3h_a.js"></script>
+  <script type="module" crossorigin src="./assets/index-BkvD_3vg.js"></script>
 </head>
   <body>
   <canvas id="game"></canvas>
@@ -688,6 +688,10 @@
       width: min(520px, calc(100vw - 24px)); box-sizing: border-box; padding: 8px 12px; border-radius: 10px; background: rgba(0,0,0,.75);
       color: #fff; font: 500 14px/1.35 system-ui; text-align: center; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 30; }
     .tutorial-tip.show { opacity: 1; }
+    /* Подсказки первого боя: крупнее и с «выскоком», чтобы новичок заметил */
+    .first-hint { font-size: 17px; padding: 10px 16px; border: 1px solid rgba(255,213,79,.6); }
+    .first-hint.pop { animation: first-hint-pop .45s ease-out; }
+    @keyframes first-hint-pop { 0% { transform: translateX(-50%) scale(.85); } 60% { transform: translateX(-50%) scale(1.06); } 100% { transform: translateX(-50%) scale(1); } }
   </style>
   <style>.menu-credits { display: block; margin: 14px auto 0; text-align: center; font: inherit; font-size: 12px; color: rgba(255,255,255,.55); text-decoration: none; background: none; border: 0; cursor: pointer; } .credits-card { width: min(640px, 100%); } .credits-body { font-size: 13px; line-height: 1.45; } .credits-body h3 { margin: 10px 0 2px; font-size: 14px; color: #ffd54f; } .credits-body p { margin: 0; } .credits-body a { color: #90caf9; } .credits-sounds { margin-top: 6px; overflow-x: auto; } .credits-sounds table { border-collapse: collapse; font-size: 12px; } .credits-sounds td, .credits-sounds th { padding: 3px 6px; border-bottom: 1px solid rgba(255,255,255,.12); text-align: left; } .menu-credits:hover { color: #fff; } .pp-badge { display: block; width: fit-content; margin: 8px auto 0; opacity: .8; } .pp-badge:hover { opacity: 1; } .pp-badge img { display: block; width: 150px; height: auto; } a.menu-btn { text-decoration: none; text-align: center; }</style>
   <div id="tank-menu" class="tank-menu">
@@ -695,6 +699,10 @@
 
     <section class="menu-screen" id="main-menu">
       <input type="text" id="player-name-input" class="name-input" placeholder="Ваше имя" maxlength="24" />
+      <button class="play-now-btn" id="btn-play-now">
+        <span class="play-now-title">⚔ В бой!</span>
+        <span class="play-now-sub">Случайная карта и танк — сразу в бой</span>
+      </button>
       <div class="mode-buttons">
         <button class="mode-btn" id="btn-single">
           <span class="mode-art" style="background-image:url(menu/mode-single.webp)"><b class="mode-vs">VS</b><span class="mode-bot">🤖</span></span>
@@ -721,6 +729,7 @@
       <button class="menu-btn secondary" id="btn-feedback"><i>💬</i><span>Отзыв</span></button>
       <a class="menu-btn secondary" id="btn-telegram" href="https://t.me/blockytanks" target="_blank" rel="noopener" title="Новости, бета-тесты и обсуждение"><i>📢</i><span>Telegram</span></a></div>
       <button class="menu-credits" id="btn-credits">📜 Авторы · звуки Freesound (CC0, CC-BY)</button>
+      <a class="menu-credits" id="btn-privacy" href="./privacy/index.html" target="_blank" rel="noopener">🔒 Политика конфиденциальности</a>
       <!-- Бейдж PixelPicked: проверка игры на площадке (+25 к видимости, 2026-10-14) -->
       <a class="pp-badge" href="https://pixelpicked.com/game/40fNZ5ObAEM/blocky-tanks" target="_blank" rel="noopener"><img src="https://api.pixelpicked.com/api/badges/40fNZ5ObAEM/live.png?theme=dark" width="250" height="54" alt="Approved on PixelPicked" /></a>
     </section>
@@ -845,6 +854,12 @@
       padding: .6rem 1rem; font-size: 1.1rem; border-radius: 8px; border: 2px solid rgba(255,213,79,.3);
       background: rgba(0,0,0,.4); color: #fff; max-width: 320px; width: 100%; text-align: center;
     }
+    /* «В бой!» (30.10, после отказа CrazyGames): один клик до боя — случайная карта и танк, настройки игрока */
+    .play-now-btn { display: flex; flex-direction: column; align-items: center; gap: .15rem; width: 100%; max-width: 640px; margin: 0 0 1rem; padding: .9rem 1rem; border: 2px solid #ffd54f; border-radius: 14px; background: linear-gradient(180deg, #e0a800, #b07800); color: #1a1408; font: inherit; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,.35); transition: transform .12s, filter .12s; }
+    .play-now-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+    .play-now-btn:active { transform: translateY(1px); }
+    .play-now-title { font-size: 1.7rem; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; }
+    .play-now-sub { font-size: .85rem; font-weight: 600; opacity: .85; }
     .mode-buttons { display: grid; grid-template-columns: 1fr; gap: 1rem; width: 100%; max-width: 640px; }
     @media (min-width: 640px) { .mode-buttons { grid-template-columns: 1fr 1fr; } }
     .mode-btn, .theme-card {
@@ -987,6 +1002,6 @@
     @media (max-width: 639px) { .mode-art { aspect-ratio: 16 / 5.5; } .mode-btn .mode-icon { width: 44px; height: 44px; font-size: 1.4rem; margin-top: -1.8rem; } }
     @media (max-height: 500px) and (min-width: 700px) { .mode-buttons { grid-template-columns: repeat(3, 1fr); max-width: 980px; } #btn-multi { grid-column: auto; } #btn-multi .mode-art { aspect-ratio: 16 / 6; } .mode-btn .mode-desc { font-size: 12px; } .profile-btn { width: min(980px, 100%); } }
     @media (max-height: 500px) { .mode-art { aspect-ratio: 16 / 5; } .round-row .menu-btn i { width: 48px; height: 48px; font-size: 20px; } }
-  </style>
+  </style>
 </body>
 </html>
